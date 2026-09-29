@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -615,10 +615,11 @@ button:disabled{opacity:.55;cursor:not-allowed}
         <label>Bio<textarea id="profileBio" maxlength="240" rows="3" placeholder="Tell your tribe about yourself"></textarea></label>
         <button class="primary full" type="submit">Save Profile</button>
       </form>
-      <p class="radio-note">Preview profile is saved only in this browser. Secure accounts and synced profiles require authentication and database services.</p>
+      <p class="radio-note">Your profile is saved to your URTRIBE STREAM account when signed in.</p>
     </div>
   </div>
   <div class="toast hidden" id="toast"></div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
 const streams = [
   {id:1,title:"Ranked Night — Road to Masters",creator:"KaiNova",cat:"Gaming",viewers:18420,emoji:"🎮",avatar:"KN",following:true,recent:9},
@@ -757,7 +758,7 @@ const profileForm=document.getElementById("profileForm");
 const profileFields={name:document.getElementById("profileDisplayName"),type:document.getElementById("profileType"),bio:document.getElementById("profileBio")};
 function openProfile(){let saved={};try{saved=JSON.parse(localStorage.getItem("urtribeProfile")||"{}");}catch(e){}profileFields.name.value=saved.name||"";profileFields.type.value=saved.type||"Listener";profileFields.bio.value=saved.bio||"";profileModal.classList.remove("hidden");}
 document.querySelector(".avatar").addEventListener("click",openProfile);
-profileForm.addEventListener("submit",e=>{e.preventDefault();const data={name:profileFields.name.value.trim(),type:profileFields.type.value,bio:profileFields.bio.value.trim()};if(!data.name)return;try{localStorage.setItem("urtribeProfile",JSON.stringify(data));}catch(e){}document.querySelector(".avatar").textContent=data.name.slice(0,2).toUpperCase();profileModal.classList.add("hidden");showToast("Profile saved in this browser preview.");});
+profileForm.addEventListener("submit",async e=>{e.preventDefault();const data={name:profileFields.name.value.trim(),type:profileFields.type.value,bio:profileFields.bio.value.trim()};if(!data.name)return;const user=window.urtribeCurrentUser?.();if(user&&window.urtribeSupabase){const {error}=await window.urtribeSupabase.from("profiles").upsert({id:user.id,display_name:data.name,bio:data.bio},{onConflict:"id"});if(error){showToast("Profile save failed: "+error.message);return;}}try{localStorage.setItem("urtribeProfile",JSON.stringify(data));}catch(e){}document.querySelector(".avatar").textContent=data.name.slice(0,2).toUpperCase();profileModal.classList.add("hidden");showToast(user?"Profile synced to your account.":"Profile saved in this browser preview. Sign in to sync it.");});
 document.getElementById("modalFollow").addEventListener("click",()=>{if(activeStreamId!==null)toggleFollow(activeStreamId);});
 document.getElementById("chatForm").addEventListener("submit",e=>{
   e.preventDefault();const input=document.getElementById("chatInput");const v=input.value.trim();if(!v)return;
@@ -942,15 +943,22 @@ function renderCart(){const qty=cart.reduce((n,p)=>n+p.qty,0),total=cart.reduce(
 document.getElementById("cartButton").addEventListener("click",()=>document.getElementById("cartModal").classList.remove("hidden"));document.getElementById("checkoutBtn").addEventListener("click",()=>showToast(cart.length?"Connect a secure payment backend to enable checkout.":"Your cart is empty."));
 
   
-// Front-end login preview only; connect a trusted authentication provider before public launch.
+// Supabase account and profile connection
 (()=>{
+ const SUPABASE_URL='https://mvfuduxvlmcnhaewfxnw.supabase.co';
+ const SUPABASE_KEY='sb_publishable_ICZvbUdeEqJqZKvf_6ACNQ_lecuOHPe';
+ const client=window.supabase?.createClient(SUPABASE_URL,SUPABASE_KEY);
  const screen=document.getElementById('authScreen'),form=document.getElementById('authForm'),heading=document.getElementById('authHeading'),sub=document.getElementById('authSub'),nameWrap=document.getElementById('authNameWrap'),password=document.getElementById('authPassword'),submit=document.getElementById('authSubmit'),toggle=document.getElementById('authToggle'),message=document.getElementById('authMessage');
- let creating=false;
- function mode(create){creating=create;heading.textContent=create?'Join the tribe':'Welcome to your tribe';sub.textContent=create?'Create your URTRIBE profile to explore creators, music, and live sessions.':'Sign in to discover live creators, music, radio, and your community.';nameWrap.hidden=!create;document.getElementById('authName').required=create;password.autocomplete=create?'new-password':'current-password';submit.textContent=create?'Create Account':'Sign In';toggle.textContent=create?'Sign in':'Create account';message.textContent='';}
+ let creating=false,currentUser=null;
+ function say(t){message.textContent=t;}
+ function mode(create){creating=create;heading.textContent=create?'Join the tribe':'Welcome to your tribe';sub.textContent=create?'Create your URTRIBE profile to explore creators, music, and live sessions.':'Sign in to discover live creators, music, radio, and your community.';nameWrap.hidden=!create;document.getElementById('authName').required=create;password.autocomplete=create?'new-password':'current-password';submit.textContent=create?'Create Account':'Sign In';toggle.textContent=create?'Sign in':'Create account';say('');}
+ async function loadProfile(user){if(!client||!user)return;const {data,error}=await client.from('profiles').select('display_name,bio').eq('id',user.id).maybeSingle();if(error){console.warn('Profile load:',error.message);return;}if(data){const avatar=document.querySelector('.avatar');if(avatar)avatar.textContent=(data.display_name||user.email||'U').slice(0,2).toUpperCase();try{localStorage.setItem('urtribeProfile',JSON.stringify({name:data.display_name||'',bio:data.bio||'',type:'Listener'}));}catch(e){}}}
  toggle.addEventListener('click',()=>mode(!creating));
- document.getElementById('authForgot').addEventListener('click',()=>{message.textContent='Password recovery will be available when secure account services are connected.';});
- document.getElementById('authVisitor').addEventListener('click',()=>{screen.classList.add('hidden');});
- form.addEventListener('submit',e=>{e.preventDefault();const email=document.getElementById('authEmail').value.trim(),pw=password.value,name=document.getElementById('authName').value.trim();if(!email||pw.length<6||(creating&&!name)){message.textContent='Enter the required details. Password must be at least 6 characters.';return;}message.textContent='';screen.classList.add('hidden');const avatar=document.querySelector('.avatar');if(avatar)avatar.textContent=(creating?name:email.split('@')[0]).slice(0,2).toUpperCase();if(typeof showToast==='function')showToast('This page is not connected to secure account services yet.');});
+ document.getElementById('authForgot').addEventListener('click',async()=>{if(!client){say('Authentication service did not load. Refresh and try again.');return;}const email=document.getElementById('authEmail').value.trim();if(!email){say('Enter your email address first.');return;}say('Sending password reset email…');const {error}=await client.auth.resetPasswordForEmail(email,{redirectTo:SUPABASE_URL.replace('https://mvfuduxvlmcnhaewfxnw.supabase.co','https://urtribe-stream.onrender.com')});say(error?error.message:'If an account exists for this email, a password reset link will be sent.');});
+ document.getElementById('authVisitor').addEventListener('click',()=>screen.classList.add('hidden'));
+ form.addEventListener('submit',async e=>{e.preventDefault();if(!client){say('Authentication service did not load. Check your connection and refresh.');return;}const email=document.getElementById('authEmail').value.trim(),pw=password.value,name=document.getElementById('authName').value.trim();if(!email||pw.length<6||(creating&&!name)){say('Enter the required details. Password must be at least 6 characters.');return;}submit.disabled=true;submit.textContent=creating?'Creating…':'Signing in…';say('');try{let result;if(creating){result=await client.auth.signUp({email,password:pw,options:{data:{display_name:name},emailRedirectTo:'https://urtribe-stream.onrender.com'}});}else{result=await client.auth.signInWithPassword({email,password:pw});}if(result.error)throw result.error;currentUser=result.data.user;if(creating&&currentUser&&result.data.session){const {error}=await client.from('profiles').upsert({id:currentUser.id,display_name:name,bio:''},{onConflict:'id'});if(error)throw error;}if(creating&&!result.data.session){say('Account created. Check your email to confirm, then sign in.');}else{screen.classList.add('hidden');await loadProfile(currentUser);if(typeof showToast==='function')showToast(creating?'Welcome to URTRIBE STREAM!':'Signed in successfully.');}}catch(err){say(err.message||'Could not complete sign-in. Please try again.');}finally{submit.disabled=false;submit.textContent=creating?'Create Account':'Sign In';}});
+ if(client){client.auth.getSession().then(async({data})=>{if(data.session){currentUser=data.session.user;screen.classList.add('hidden');await loadProfile(currentUser);}});client.auth.onAuthStateChange((_event,session)=>{currentUser=session?.user||null;if(currentUser){screen.classList.add('hidden');loadProfile(currentUser);}});}else say('Authentication library unavailable. Refresh while connected to the internet.');
+ window.urtribeSupabase=client;window.urtribeCurrentUser=()=>currentUser;
 })();
 
   </script>
