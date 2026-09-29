@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#08080b">
+  <meta name="description" content="URTRIBE STREAM — live DJs, artists, radio, videos, and music discovery.">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png">
+  <link rel="apple-touch-icon" href="/icons/icon-192.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>URTRIBE STREAM</title>
+  <style>
+:root{
+  --bg:#08080b;--panel:#111117;--panel2:#17171f;--text:#f7f7fb;--muted:#92929e;
+  --line:#282832;--accent:#e65f00;--accent2:#b96cff;--danger:#ff4f7b;
+  --shadow:0 18px 55px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:radial-gradient(circle at 70% -10%,#20162d 0,#08080b 35%);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif}
+button,input,select{font:inherit}
+button{cursor:pointer}
+.topbar{height:72px;position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:28px;padding:0 28px;background:rgba(8,8,11,.84);backdrop-filter:blur(18px);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:10px;color:var(--text);text-decoration:none;font-weight:900;letter-spacing:-.5px;white-space:nowrap}
+.brand-mark{display:grid;place-items:center;width:34px;height:34px;border-radius:10px;background:var(--accent);color:#09090b;font-weight:1000}
+.accent{color:var(--accent)}
+.search-wrap{height:42px;display:flex;align-items:center;flex:1;max-width:590px;margin:auto;background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.search-wrap input{flex:1;background:transparent;border:0;outline:0;color:var(--text);padding:0 15px}
+.search-wrap button{height:100%;width:48px;background:transparent;border:0;color:var(--muted);font-size:24px}
+.top-actions{display:flex;align-items:center;gap:10px}
+.icon-btn,.avatar{border:1px solid var(--line);background:var(--panel);color:var(--text);height:40px;min-width:40px;border-radius:10px}
+.avatar{border-radius:50%;font-size:12px;font-weight:800}
+.go-live,.primary{border:0;background:var(--accent);color:#08080b;font-weight:850;padding:11px 17px;border-radius:10px}
+.secondary{border:1px solid var(--line);background:rgba(255,255,255,.03);color:var(--text);padding:11px 17px;border-radius:10px;font-weight:750}
+.layout{display:grid;grid-template-columns:235px 1fr;min-height:calc(100vh - 72px)}
+.sidebar{border-right:1px solid var(--line);padding:25px 15px;position:sticky;top:72px;height:calc(100vh - 72px);display:flex;flex-direction:column}
+.side-label{font-size:10px;letter-spacing:1.5px;color:#666674;font-weight:900;padding:0 12px;margin:8px 0}
+.side-section{margin-bottom:23px}
+.side-link{display:flex;align-items:center;gap:12px;width:100%;padding:11px 12px;margin:3px 0;background:transparent;border:0;border-radius:9px;color:#aaaab5;text-align:left}
+.side-link:hover,.side-link.active{background:var(--panel2);color:var(--text)}
+.side-link.active{box-shadow:inset 3px 0 var(--accent)}
+.tribe-card{margin-top:auto;background:linear-gradient(145deg,#171a16,#15131b);border:1px solid #292c29;border-radius:15px;padding:17px}
+.tribe-icon{font-size:23px;color:var(--accent)}
+.tribe-card strong{display:block;margin:7px 0}
+.tribe-card p{font-size:12px;line-height:1.5;color:var(--muted);margin:0 0 12px}
+.tribe-card button{width:100%;border:0;border-radius:8px;padding:9px;background:#292c2a;color:#fff}
+.side-footer{font-size:9px;line-height:1.6;color:#555560;margin:18px 4px 0}
+.content{padding:34px clamp(20px,4vw,60px) 70px;max-width:1500px;width:100%;margin:auto}
+.hero{min-height:330px;display:flex;align-items:center;justify-content:space-between;padding:30px 4% 38px;border:1px solid var(--line);border-radius:25px;overflow:hidden;position:relative;background:linear-gradient(120deg,rgba(185,108,255,.12),rgba(230,95,0,.05)),#101015}
+.hero h1{font-size:clamp(40px,5vw,67px);line-height:.98;letter-spacing:-3px;margin:10px 0 17px}
+.hero h1 span{color:var(--accent)}
+.hero p{color:var(--muted);max-width:510px}
+.eyebrow{font-size:10px;font-weight:900;letter-spacing:1.8px;color:var(--accent)}
+.hero-actions{display:flex;gap:10px;margin-top:24px}
+.hero-orbit{width:300px;height:250px;position:relative;display:grid;place-items:center;flex:none}
+.orbit-ring{position:absolute;border:1px solid #3d3d49;border-radius:50%;transform:rotate(-22deg)}
+.ring-one{width:230px;height:115px}.ring-two{width:270px;height:170px}
+.orbit-core{width:85px;height:85px;border-radius:24px;display:grid;place-items:center;font-size:35px;font-weight:1000;background:var(--accent);color:#09090b;box-shadow:0 0 70px rgba(230,95,0,.25)}
+.orb{position:absolute;width:40px;height:40px;display:grid;place-items:center;background:#1e1e27;border:1px solid #343440;border-radius:12px}
+.o1{top:15px;right:58px}.o2{bottom:30px;left:45px}.o3{top:95px;right:0}
+.section-head{display:flex;align-items:end;justify-content:space-between;margin:38px 0 18px}
+.section-head h2{margin:0 0 4px;font-size:24px;letter-spacing:-.7px}.section-head p{margin:0;color:var(--muted);font-size:13px}
+.sort-controls{display:flex;border:1px solid var(--line);border-radius:9px;padding:3px}.sort{border:0;background:transparent;color:var(--muted);padding:7px 11px;border-radius:7px;font-size:12px}.sort.active{background:var(--panel2);color:var(--text)}
+.stream-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
+.stream-card{min-width:0;cursor:pointer;position:relative}
+.card-follow{margin:8px 0 0 44px;padding:6px 12px;border:1px solid var(--line);border-radius:18px;background:transparent;color:var(--text);font-weight:700;cursor:pointer}
+.card-follow.is-following{background:var(--accent);border-color:var(--accent);color:#fff}
+.thumb{height:170px;border-radius:13px;position:relative;overflow:hidden;background:linear-gradient(135deg,#28203a,#151a1c);border:1px solid var(--line)}
+.thumb:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.55),transparent 50%)}
+.thumb .emoji{position:absolute;inset:0;display:grid;place-items:center;font-size:55px;filter:drop-shadow(0 10px 20px #000)}
+.live-badge{position:absolute;z-index:2;top:10px;left:10px;background:var(--danger);font-size:9px;font-weight:900;padding:4px 7px;border-radius:5px}
+.viewer-badge{position:absolute;z-index:2;right:10px;bottom:10px;background:rgba(0,0,0,.75);padding:4px 7px;border-radius:5px;font-size:10px}
+.stream-info{display:flex;gap:10px;padding-top:11px}
+.creator-avatar{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:#292934;border:1px solid #3a3a47;flex:none}
+.stream-info h3{font-size:13px;margin:0 0 4px;line-height:1.25}
+.stream-info p{font-size:11px;color:var(--muted);margin:0}
+.categories{margin-top:48px}.compact{margin-top:0}
+.category-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:13px}
+.category-card{min-height:135px;border:1px solid var(--line);border-radius:14px;background:var(--panel);color:var(--text);padding:18px;text-align:left;display:flex;flex-direction:column;align-items:flex-start;transition:.2s}
+.category-card:hover{transform:translateY(-3px);border-color:#4b4b59}
+.category-card span{font-size:28px;margin-bottom:auto}.category-card strong{font-size:14px}.category-card small{color:var(--muted);margin-top:4px}
+.gaming{background:linear-gradient(145deg,#151a20,var(--panel))}.music{background:linear-gradient(145deg,#1b1622,var(--panel))}.talk{background:linear-gradient(145deg,#171c1b,var(--panel))}.creative{background:linear-gradient(145deg,#211c16,var(--panel))}.sports{background:linear-gradient(145deg,#191a20,var(--panel))}
+.modal{position:fixed;z-index:50;inset:0;background:rgba(0,0,0,.72);backdrop-filter:blur(8px);display:grid;place-items:center;padding:20px}
+.hidden{display:none!important}
+.modal-card{position:relative;width:min(510px,100%);background:#111117;border:1px solid #30303a;border-radius:18px;padding:28px;box-shadow:var(--shadow)}
+.stream-modal{width:min(900px,100%);padding:0;overflow:hidden}
+.close{position:absolute;z-index:5;right:12px;top:12px;width:34px;height:34px;border:1px solid #444;background:#14141a;color:#fff;border-radius:50%;font-size:22px}
+.player-placeholder{height:430px;display:grid;place-items:center;position:relative;background:radial-gradient(circle,#28223a,#0c0c10 65%)}
+.play-pulse{width:75px;height:75px;border-radius:50%;display:grid;place-items:center;background:var(--accent);color:#000;font-size:23px;box-shadow:0 0 0 14px rgba(230,95,0,.08)}
+#modalLive{position:absolute;left:18px;top:18px;background:var(--danger);padding:6px 9px;border-radius:5px;font-size:10px;font-weight:900}
+.modal-body{padding:22px}.modal-title-row{display:flex;justify-content:space-between;gap:15px}.modal-title-row h2{margin:0}.modal-title-row p{color:var(--muted);font-size:13px}.chat-box{margin-top:20px;border:1px solid var(--line);border-radius:12px;overflow:hidden}.chat-head{padding:11px 13px;border-bottom:1px solid var(--line);font-weight:800;font-size:12px}.chat-head span{float:right;color:var(--muted);font-weight:500}.chat-messages{padding:10px 13px;height:115px;overflow:auto}.chat-messages p{font-size:12px;color:#bbb;margin:7px 0}.chat-messages b{color:var(--text)}#chatForm{display:flex;border-top:1px solid var(--line)}#chatForm input{flex:1;background:#0d0d12;border:0;outline:0;color:#fff;padding:11px}#chatForm button{background:var(--accent);border:0;padding:0 16px;font-weight:800}
+.modal-card>h2{font-size:30px;margin:8px 0}.muted{color:var(--muted);font-size:13px}.modal-card label{display:block;color:#bbb;font-size:12px;font-weight:700;margin:18px 0}.modal-card label input,.modal-card select{display:block;width:100%;margin-top:7px;background:#0c0c11;border:1px solid var(--line);border-radius:9px;padding:12px;color:#fff;outline:0}.full{width:100%;margin-top:8px}
+.toast{position:fixed;z-index:80;right:24px;bottom:24px;background:#f5f5f5;color:#111;padding:12px 16px;border-radius:10px;font-weight:800;font-size:13px;box-shadow:var(--shadow)}
+body.light{--bg:#f4f4f7;--panel:#fff;--panel2:#eeeef2;--text:#111117;--muted:#666672;--line:#dedee5;background:#f4f4f7}.light .topbar{background:rgba(244,244,247,.85)}.light .hero{background:#fff}.light .search-wrap{background:#fff}
+@media(max-width:1100px){.stream-grid{grid-template-columns:repeat(3,1fr)}.category-grid{grid-template-columns:repeat(3,1fr)}.hero-orbit{display:none}}
+@media(max-width:800px){.layout{grid-template-columns:1fr}.sidebar{display:none}.content{padding:20px 16px}.topbar{padding:0 14px;gap:10px}.brand{font-size:13px}.search-wrap{max-width:none}.top-actions .icon-btn{display:none}.go-live{padding:9px 10px;font-size:12px}.hero{min-height:350px}.stream-grid{grid-template-columns:repeat(2,1fr)}.category-grid{grid-template-columns:repeat(2,1fr)}.player-placeholder{height:260px}}
+@media(max-width:520px){.brand span:last-child{display:none}.hero h1{font-size:42px}.stream-grid{grid-template-columns:1fr}.category-grid{grid-template-columns:1fr 1fr}.section-head{align-items:flex-start;gap:12px;flex-direction:column}.sort-controls{align-self:flex-end}}
+
+/* Radio and apparel shop */
+.side-link[data-scroll="apparelShop"]{margin-top:7px}
+.hero-actions{flex-wrap:wrap}
+.product-card{transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease}
+.product-card:hover{transform:translateY(-4px);border-color:var(--accent);box-shadow:0 14px 35px #0003}
+.product-art{isolation:isolate}
+.product-art:after{content:"";position:absolute;inset:0;background:linear-gradient(145deg,transparent 45%,rgba(230,95,0,.09));pointer-events:none}
+.add-cart:focus-visible,.cart-button:focus-visible,.side-link:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.shop-section{scroll-margin-top:92px}
+.movie-section{margin-top:48px;scroll-margin-top:92px}.movie-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.movie-card{overflow:hidden;border:1px solid var(--line);border-radius:14px;background:var(--panel);min-width:0}.movie-poster{height:170px;display:grid;place-items:center;position:relative;overflow:hidden;background:radial-gradient(circle at 25% 20%,#78402b,#271a2d 48%,#101015)}.movie-card:nth-child(2) .movie-poster{background:radial-gradient(circle at 75% 25%,#b96cff,#2c1b3b 45%,#101015)}.movie-card:nth-child(3) .movie-poster{background:radial-gradient(circle at 50% 20%,#e65f00,#392016 48%,#101015)}.movie-poster:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,#0009,transparent 65%)}.movie-poster span{font-size:56px;filter:drop-shadow(0 8px 18px #0009);z-index:1}.movie-tag{position:absolute;z-index:2;top:10px;left:10px;background:#0009;border:1px solid #fff3;border-radius:5px;padding:5px 7px;font-size:9px;font-weight:900;letter-spacing:1px}.movie-info{padding:14px}.movie-info h3{font-size:14px;margin:0 0 5px}.movie-info p{font-size:11px;color:var(--muted);margin:0 0 13px;line-height:1.5}.movie-info button{background:var(--accent);border:0;color:#09090b;border-radius:8px;padding:9px 12px;font-weight:850;font-size:11px}.movie-modal{width:min(850px,100%);max-height:90vh;overflow:auto}.movie-player{width:100%;max-height:55vh;background:#050507;border-radius:10px;margin:15px 0}.movie-player video{width:100%;max-height:55vh;display:block;background:#050507;border-radius:10px}.movie-url-row{display:flex;gap:8px}.movie-url-row input{flex:1;min-width:0;background:#0c0c11;border:1px solid var(--line);border-radius:9px;padding:11px;color:#fff}.movie-help{font-size:11px;color:var(--muted);line-height:1.5}@media(max-width:800px){.movie-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:520px){.movie-grid{grid-template-columns:1fr}}
+.radio-shop{scroll-margin-top:92px}
+@media(max-width:600px){.hero-actions button{flex:1 1 130px}.radio-panel{padding:14px}.product-info{padding:11px}.product-bottom{gap:6px}.add-cart{padding:8px 7px}}
+.live-pill{border:1px solid #542b35;color:#ff718d;background:#29151b;border-radius:20px;padding:7px 11px;font-size:9px;font-weight:900}
+.radio-panel{display:grid;grid-template-columns:210px 1fr;gap:22px;padding:22px;border:1px solid var(--line);border-radius:17px;background:linear-gradient(115deg,rgba(185,108,255,.09),rgba(230,95,0,.04)),var(--panel)}
+.radio-art{min-height:185px;border-radius:13px;display:grid;place-items:center;position:relative;overflow:hidden;background:radial-gradient(circle,#544076,#201a30 55%,#111117);font-size:9px;letter-spacing:2px}
+.radio-disc{width:125px;height:125px;border-radius:50%;display:grid;place-items:center;position:relative;background:repeating-radial-gradient(circle,#191920 0 4px,#292832 5px 6px);border:7px solid #15151b;color:var(--accent);font-size:35px;font-weight:1000;box-shadow:0 10px 35px #08080b}
+.radio-disc:before{content:"";position:absolute;width:25px;height:25px;border-radius:50%;background:var(--accent)}.radio-disc span{z-index:1;color:#111;font-size:13px}
+.radio-art>b{position:absolute;bottom:10px;color:white}.radio-kicker{font-size:9px;letter-spacing:1.5px;font-weight:900;color:var(--accent)}.radio-details{align-self:center;min-width:0}.radio-details h3{font-size:25px;margin:8px 0 3px}.radio-details>p{font-size:12px;color:var(--muted);margin:0}
+.radio-progress{height:4px;border-radius:4px;background:#30303a;margin-top:20px;overflow:hidden}.radio-progress span{display:block;width:0;height:100%;background:var(--accent)}.radio-time{display:flex;justify-content:space-between;color:#777783;font-size:9px;margin-top:6px}
+.radio-controls{display:flex;align-items:center;gap:10px;margin-top:15px}.radio-source{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}.radio-source input,.radio-source select{flex:1;min-width:160px;padding:10px 12px;border:1px solid var(--line);border-radius:9px;background:var(--panel2);color:var(--text);font:inherit;font-size:12px}.radio-source input{flex:1;min-width:180px;padding:10px 12px;border:1px solid var(--line);border-radius:9px;background:var(--panel2);color:var(--text);font:inherit;font-size:12px}.radio-source button{padding:10px 14px;border:0;border-radius:9px;background:var(--accent);color:#101010;font-weight:800;cursor:pointer}.radio-audio{width:100%;height:38px;margin-top:12px}.radio-file{font-size:11px;color:var(--muted);margin-top:8px}.radio-play{width:39px;height:39px;border:0;border-radius:50%;background:var(--accent);color:#09090b}.radio-skip{width:32px;height:32px;border:1px solid var(--line);border-radius:50%;background:var(--panel2);color:var(--text);font-size:18px}.radio-status{color:var(--muted);font-size:10px;flex:1}.volume-control{display:flex;align-items:center;gap:6px;color:var(--muted);font-size:9px}.volume-control input{width:70px;accent-color:var(--accent)}.radio-note{font-size:10px!important;color:#747481!important;margin-top:12px!important}
+.shop-section{margin-top:48px}.cart-button{background:var(--panel);border:1px solid var(--line);border-radius:9px;color:var(--text);padding:9px 12px;font-size:12px;font-weight:800}.cart-button span{display:inline-grid;place-items:center;min-width:20px;height:20px;margin-left:5px;background:var(--accent);color:#09090b;border-radius:50%;font-size:10px}
+.shop-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}.product-card{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--panel)}.product-art{height:180px;display:grid;place-items:center;position:relative;background:linear-gradient(145deg,#25252e,#15151c);overflow:hidden}.product-art:before{content:"";position:absolute;width:170px;height:170px;border-radius:50%;background:rgba(255,255,255,.035)}
+.merch-shirt{width:112px;height:130px;position:relative;z-index:1;filter:drop-shadow(0 12px 13px #0006)}.merch-shirt:before{content:"";position:absolute;inset:16px 16px 0;background:var(--shirt,#eee);clip-path:polygon(24% 0,38% 0,50% 9%,62% 0,76% 0,100% 23%,83% 39%,75% 30%,75% 100%,25% 100%,25% 30%,17% 39%,0 23%)}.merch-shirt:after{content:"URTRIBE";position:absolute;top:53px;left:27px;font-size:10px;font-weight:1000;color:var(--print,#111)}
+.product-art.cap .merch-shirt{height:80px;width:125px}.product-art.cap .merch-shirt:before{inset:20px 6px 0;border-radius:45%;clip-path:polygon(15% 0,85% 0,100% 50%,82% 72%,18% 72%,0 50%)}.product-art.cap .merch-shirt:after{top:47px;left:42px}
+.product-art.tote .merch-shirt{width:100px;height:120px}.product-art.tote .merch-shirt:before{inset:30px 10px 0;clip-path:polygon(0 0,100% 0,90% 100%,10% 100%)}.product-art.tote .merch-shirt:after{top:67px;left:22px}
+.product-label{position:absolute;left:10px;top:10px;z-index:2;background:#0008;border:1px solid #fff2;border-radius:5px;padding:4px 6px;font-size:8px;color:#fff;font-weight:900;letter-spacing:1px}.product-info{padding:13px}.product-info h3{margin:0 0 5px;font-size:13px}.product-info p{margin:0;color:var(--muted);font-size:10px}.product-bottom{display:flex;align-items:center;justify-content:space-between;margin-top:13px}.product-price{font-weight:900;font-size:13px}.add-cart{border:0;border-radius:7px;padding:8px 10px;background:var(--panel2);color:var(--text);font-size:10px;font-weight:850}.add-cart:hover{background:var(--accent);color:#09090b}
+.cart-items{margin:20px 0;max-height:260px;overflow:auto}.cart-line{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);font-size:12px}.cart-line small{display:block;color:var(--muted);margin-top:4px}.cart-line button{background:transparent;color:#ff718d;border:0;font-size:10px}.cart-total{display:flex;justify-content:space-between;border-top:1px solid var(--line);padding:15px 0;color:var(--muted);font-size:13px}.cart-total strong{color:var(--text)}.cart-card{max-height:85vh;overflow:auto}
+@media(max-width:1100px){.shop-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:600px){.radio-panel{grid-template-columns:1fr}.radio-art{min-height:145px}.shop-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.product-art{height:145px}.radio-controls{gap:7px}.volume-control input{width:45px}}
+
+
+/* URTRIBE professional layout polish */
+:root{--bg:#090909;--panel:#121212;--panel2:#1b1b1b;--text:#f8f7f4;--muted:#a5a19b;--line:#2a2926;--accent:#e65f00;--accent2:#ff8a42;--shadow:0 20px 60px rgba(0,0,0,.32)}
+body{background:radial-gradient(ellipse at 70% 0%,rgba(230,95,0,.075),transparent 34%),var(--bg);letter-spacing:.01em}
+.topbar{height:70px;padding-inline:clamp(16px,3vw,42px);gap:clamp(14px,2vw,30px);background:rgba(9,9,9,.94);border-bottom-color:#292723}
+.brand{font-size:15px;letter-spacing:.15px}.brand-mark{border-radius:9px;box-shadow:0 5px 18px rgba(230,95,0,.22)}
+.search-wrap{border-radius:999px;max-width:620px;background:#141414}.search-wrap:focus-within{border-color:rgba(230,95,0,.65);box-shadow:0 0 0 3px rgba(230,95,0,.08)}
+.icon-btn,.avatar{border-radius:50%;background:#141414}.go-live,.primary{border-radius:999px;padding:11px 19px;box-shadow:0 5px 18px rgba(230,95,0,.14)}.secondary{border-radius:999px}
+.layout{grid-template-columns:225px minmax(0,1fr);max-width:1800px;margin:0 auto}.sidebar{padding:25px 14px;background:rgba(12,12,12,.55);border-right-color:#242321}.side-label{color:#858078;letter-spacing:1.7px}.side-link{border-radius:10px;padding:12px 13px;font-size:13px;transition:background .18s,color .18s}.side-link:hover,.side-link.active{background:#211b15}.side-link.active{box-shadow:inset 3px 0 var(--accent);color:#fff}.tribe-card{background:linear-gradient(145deg,#20180f,#141414);border-color:#44301e;border-radius:14px}
+.content{max-width:1480px;padding:34px clamp(20px,3.4vw,56px) 80px}.hero{min-height:315px;border-radius:22px;padding:clamp(25px,4vw,54px);border-color:#373027;background:radial-gradient(ellipse at 85% 50%,rgba(230,95,0,.15),transparent 40%),linear-gradient(110deg,#17130f,#111);box-shadow:var(--shadow)}.hero h1{font-size:clamp(38px,4.6vw,62px);letter-spacing:-2.6px}.hero p{font-size:15px;line-height:1.7;color:#b4afa7}.eyebrow{letter-spacing:2px}.hero-orbit{transform:scale(.92)}.orbit-ring{border-color:#4a3a2b}.orbit-core{box-shadow:0 0 65px rgba(230,95,0,.22)}
+.section-head{margin:42px 0 19px;align-items:center}.section-head h2{font-size:23px;letter-spacing:-.5px}.section-head p{font-size:12px;line-height:1.6;margin-top:5px}.sort-controls{border-radius:999px;padding:4px;background:#101010}.sort{border-radius:999px;padding:8px 14px}.sort.active{background:#292018;color:#ff8a42}
+.stream-grid{gap:22px}.stream-card{padding:0 0 12px;border-radius:14px;transition:transform .2s ease}.stream-card:hover{transform:translateY(-3px)}.thumb{height:clamp(145px,13vw,190px);border-radius:14px;background-color:#191714}.stream-info{padding:12px 3px 0}.stream-info h3{font-size:13px}.stream-info p{font-size:11px}.creator-avatar{background:#29231c;border-color:#453626}.card-follow{margin-left:48px;font-size:11px;padding:6px 12px;border-radius:999px}.card-follow.is-following{color:#17100a}.card-actions{display:flex;gap:8px;align-items:center;margin-left:48px}.card-actions button{font-size:11px;padding:6px 11px;border-radius:999px;cursor:pointer}.card-like{border:1px solid var(--line);background:#171717;color:var(--text)}.card-like.is-liked{color:#ff6b85;border-color:#ff6b85}
+.radio-panel{grid-template-columns:190px minmax(0,1fr);gap:25px;border-radius:18px;padding:22px;background:linear-gradient(110deg,rgba(230,95,0,.09),transparent 55%),#121212;border-color:#332a20}.radio-art{background:radial-gradient(circle,#67401f,#292018 56%,#141414);border:1px solid #44301e}.radio-details h3{font-size:24px}.radio-source input,.radio-source select{border-radius:10px;background:#1a1a1a}.radio-source button,.movie-info button{border-radius:999px;padding-inline:16px}.radio-play{box-shadow:0 0 0 5px rgba(230,95,0,.1)}.movie-section,.shop-section,.categories{margin-top:50px}.movie-grid{gap:18px}.movie-card,.product-card{border-radius:15px;border-color:#302e2a;transition:transform .2s,border-color .2s,box-shadow .2s}.movie-card:hover,.product-card:hover{transform:translateY(-3px);border-color:#624326;box-shadow:0 15px 35px #0004}.movie-poster{height:180px}.movie-info,.product-info{padding:16px}.movie-info h3,.product-info h3{font-size:14px}.movie-info p,.product-info p{font-size:11px;line-height:1.6}.movie-info button{color:#15100b}.shop-grid{gap:18px}.product-art{height:195px;background:radial-gradient(circle at 50% 30%,#30271e,#181715 70%)}.product-art:before{background:rgba(255,255,255,.045)}.product-bottom{margin-top:16px}.product-price{font-size:14px}.add-cart{border-radius:999px;padding:9px 13px;background:#29231c;color:#f8f7f4}.add-cart:hover{color:#15100b}.cart-button{border-radius:999px;padding:9px 15px}.category-grid{gap:15px}.category-card{border-radius:14px;min-height:125px;background:linear-gradient(145deg,#1d1a16,#121212);border-color:#302c26}.category-card:hover{border-color:#694725;transform:translateY(-3px)}
+.modal-card{border-radius:18px}.close{border-radius:50%}.toast{border-radius:999px;background:#e65f00;color:#17100a}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+@media(max-width:1100px){.layout{grid-template-columns:205px minmax(0,1fr)}.content{padding-inline:24px}.stream-grid{gap:16px}}
+@media(max-width:800px){.layout{display:block}.sidebar{display:none}.content{padding:20px 16px 60px}.topbar{height:64px}.hero{min-height:300px;border-radius:17px}.section-head{margin-top:34px}.radio-panel{grid-template-columns:155px minmax(0,1fr);gap:16px}}
+@media(max-width:600px){.radio-panel{grid-template-columns:1fr}.radio-art{min-height:130px}.radio-disc{width:95px;height:95px}.hero h1{letter-spacing:-1.8px}.movie-grid,.shop-grid{gap:12px}.product-art{height:150px}.movie-poster{height:145px}}
+
+
+/* Creator-video hybrid: browseable long-form + swipeable short clips */
+.shorts-section{margin:34px 0 10px;scroll-margin-top:90px}.shorts-mark{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:7px;background:var(--accent);color:#17100b;font-size:12px;vertical-align:middle;letter-spacing:0}.shorts-hint{font-size:11px;color:var(--muted)}.shorts-rail{display:flex;gap:15px;overflow-x:auto;padding:2px 2px 15px;scroll-snap-type:x mandatory;scrollbar-width:thin;scrollbar-color:#55402a transparent}.short-card{flex:0 0 158px;min-width:0;cursor:pointer;scroll-snap-align:start}.short-visual{height:235px;border-radius:15px;position:relative;overflow:hidden;display:grid;place-items:center;border:1px solid #393027;background:linear-gradient(155deg,#53321d,#17120f 72%);transition:transform .2s,border-color .2s}.short-card:hover .short-visual{transform:translateY(-3px);border-color:var(--accent)}.short-v2{background:linear-gradient(155deg,#3c263e,#17121b 70%)}.short-v3{background:linear-gradient(155deg,#39402a,#141812 70%)}.short-v4{background:linear-gradient(155deg,#263a42,#101519 70%)}.short-v5{background:linear-gradient(155deg,#47321d,#17130e 70%)}.short-visual:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(0,0,0,.76),transparent 55%);pointer-events:none}.short-emoji{font-size:54px;filter:drop-shadow(0 8px 20px #0008);transform:scale(1);transition:transform .2s}.short-card:hover .short-emoji{transform:scale(1.12)}.short-play{position:absolute;z-index:2;top:48%;left:50%;transform:translate(-50%,-50%);display:grid;place-items:center;width:39px;height:39px;border-radius:50%;background:#e65f00;color:#1a1008;font-size:13px;opacity:.94}.short-label{position:absolute;z-index:2;top:10px;left:10px;font-size:8px;letter-spacing:1px;background:#090909b8;border:1px solid #fff2;border-radius:5px;padding:5px 7px}.short-visual small{position:absolute;z-index:2;right:9px;bottom:9px;font-size:9px;background:#0009;padding:4px 6px;border-radius:5px}.short-meta{display:flex;flex-direction:column;gap:4px;padding:10px 2px}.short-meta strong{font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.short-meta span{font-size:10px;color:var(--muted)}.short-create{flex:0 0 150px;height:235px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;border:1px dashed #59432d;border-radius:15px;background:linear-gradient(150deg,#1e1812,#111);color:var(--text);scroll-snap-align:start}.short-create>span{display:grid;place-items:center;width:44px;height:44px;border-radius:50%;background:var(--accent);color:#1a1008;font-size:25px}.short-create strong{font-size:12px}.short-create small{color:var(--muted);font-size:10px}.short-create:hover{border-color:var(--accent);background:#21180f}
+@media(max-width:600px){.short-card{flex-basis:140px}.short-visual,.short-create{height:210px}.short-create{flex-basis:135px}.shorts-hint{display:none}}
+  
+/* URTRIBE sign-in gate */
+.auth-screen{position:fixed;inset:0;z-index:10000;display:grid;place-items:center;padding:22px;background:radial-gradient(ellipse at 50% 0%,#351b0d 0%,#100d0b 38%,#070709 78%);overflow-y:auto}
+.auth-screen.hidden{display:none}.auth-card{width:min(100%,440px);padding:32px;border:1px solid #3a2a20;border-radius:22px;background:linear-gradient(155deg,#171419,#0d0d11 70%);box-shadow:0 24px 90px #000b;text-align:center}.auth-logo{display:flex;align-items:center;justify-content:center;gap:11px;font-weight:900;font-size:21px;letter-spacing:.4px;margin-bottom:28px}.auth-logo-mark{display:grid;place-items:center;width:42px;height:42px;border-radius:13px;background:var(--accent);color:#1a0d05;font-size:25px}.auth-card h1{font-size:27px;margin:0 0 8px}.auth-sub{color:var(--muted);font-size:13px;line-height:1.6;margin:0 0 24px}.auth-form{text-align:left;display:grid;gap:13px}.auth-form label{font-size:12px;color:#d7d3d0;display:grid;gap:7px}.auth-form input{width:100%;padding:13px 14px;border:1px solid #343039;border-radius:10px;background:#09090d;color:var(--text);font:inherit;outline:none}.auth-form input:focus{border-color:var(--accent);box-shadow:0 0 0 3px #e65f0025}.auth-submit{width:100%;padding:13px;border:0;border-radius:10px;background:var(--accent);color:#1b0d04;font-weight:800;cursor:pointer;margin-top:4px}.auth-links{display:flex;justify-content:space-between;gap:10px;margin-top:16px;font-size:12px}.auth-links button,.auth-visitor{background:none;border:0;color:#ff9149;cursor:pointer;font:inherit}.auth-visitor{margin-top:22px;color:#d3d0d5;text-decoration:underline;text-underline-offset:3px}.auth-note{font-size:10px;line-height:1.5;color:#92929e;margin:18px 0 0}.auth-message{font-size:12px;color:#ffad70;min-height:17px;line-height:1.4}.auth-switch{color:#ff9149;background:none;border:0;cursor:pointer;font:inherit;font-weight:700}
+
+
+/* URTRIBE STREAM global footer */
+.site-footer{border-top:1px solid var(--line);background:rgba(12,12,17,.92);padding:34px clamp(20px,4vw,60px) 22px;color:var(--muted)}
+.footer-inner{max-width:1500px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr 1.6fr;gap:28px}
+.footer-brand{color:var(--text);font-weight:900;letter-spacing:.3px;font-size:16px}
+.footer-brand span{color:var(--accent)}
+.footer-copy{max-width:420px;font-size:12px;line-height:1.7;margin:10px 0 0}
+.footer-title{font-size:11px;letter-spacing:1.2px;text-transform:uppercase;color:var(--text);font-weight:850;margin:2px 0 12px}
+.footer-links{display:grid;gap:9px}.footer-links.resource-links{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px}.footer-links.resource-links a{width:auto;white-space:nowrap}
+.footer-links.social-links{display:flex;flex-wrap:wrap;align-items:center;gap:10px}.footer-links.social-links a,.footer-share-copy{display:grid;place-items:center;width:38px;height:38px;flex:0 0 38px;border:1px solid var(--line);border-radius:50%;background:rgba(255,255,255,.035);color:var(--muted);font:inherit;font-size:16px;font-weight:800;text-decoration:none;transition:background .2s,color .2s,border-color .2s,transform .2s}.footer-links.social-links a:hover,.footer-share-copy:hover{background:var(--accent);border-color:var(--accent);color:#17100b;text-decoration:none;transform:translateY(-2px)}.footer-share-copy{cursor:pointer}.footer-social-bottom{max-width:1500px;margin:26px auto 0;padding-top:18px;border-top:1px solid var(--line);display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center}.footer-social-bottom .footer-title{margin:0;font-size:12px}.footer-social-bottom .social-links{justify-content:center}
+.social-icon{display:grid;place-items:center;line-height:1}.social-icon svg{width:17px;height:17px;display:block;fill:currentColor}.social-facebook{font-family:Arial,sans-serif;font-size:21px}.social-x{font-size:15px}.social-whatsapp{font-size:18px}.social-email{font-size:17px}.social-copy{font-size:15px}.social-links a:focus-visible,.social-links button:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.footer-links a{font-size:12px;color:var(--muted);text-decoration:none;width:max-content}
+.footer-links a:hover{color:var(--text);text-decoration:underline;text-underline-offset:3px}
+.footer-bottom{max-width:1500px;margin:24px auto 0;padding-top:15px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:11px}
+@media(max-width:700px){.footer-inner{grid-template-columns:1fr 1fr;gap:22px}.footer-about{grid-column:1/-1}}
+@media(max-width:420px){.footer-inner{grid-template-columns:1fr}.footer-about{grid-column:auto}}
+
+/* URTRIBE STREAM professional layout polish */
+:root{--accent:#f07819;--accent2:#a66bff;--line:rgba(255,255,255,.10);--shadow:0 20px 60px rgba(0,0,0,.32)}
+body{letter-spacing:.005em;line-height:1.5;background:radial-gradient(ellipse at 78% -12%,rgba(166,107,255,.13),transparent 38%),radial-gradient(ellipse at 4% 24%,rgba(240,120,25,.07),transparent 30%),var(--bg)}
+.topbar{height:70px;padding-inline:clamp(14px,3vw,38px);gap:clamp(12px,2vw,28px);border-bottom-color:rgba(255,255,255,.09)}
+.brand{font-size:15px;letter-spacing:-.35px}.brand-mark{box-shadow:0 5px 18px rgba(240,120,25,.25)}
+.search-wrap{border-radius:999px;background:rgba(255,255,255,.035);transition:border-color .2s,box-shadow .2s}.search-wrap:focus-within{border-color:rgba(240,120,25,.65);box-shadow:0 0 0 3px rgba(240,120,25,.10)}
+.layout{grid-template-columns:220px minmax(0,1fr)}
+.sidebar{padding:22px 13px;border-right-color:rgba(255,255,255,.08);background:rgba(8,8,11,.22)}
+.side-label{font-size:10px;letter-spacing:1.7px}.side-link{font-size:13px;font-weight:650;transition:background .18s,color .18s,transform .18s}.side-link:hover{transform:translateX(2px)}
+.content{max-width:1600px;padding:clamp(22px,3vw,42px) clamp(16px,3.2vw,54px) 76px}
+.hero{min-height:310px;padding:clamp(24px,4vw,48px);border-radius:22px;background:linear-gradient(115deg,rgba(166,107,255,.13),rgba(240,120,25,.075) 58%,rgba(255,255,255,.025)),#101015;box-shadow:var(--shadow)}
+.hero h1{font-weight:900;letter-spacing:-.055em;line-height:.99}.hero p{font-size:15px;line-height:1.7}.eyebrow{letter-spacing:1.9px}
+.primary,.secondary,.go-live,.tribe-card button,.radio-controls button,.movie-info button,.add-cart,.cart-button{transition:transform .18s,filter .18s,background .18s,border-color .18s}
+.primary:hover,.go-live:hover,.tribe-card button:hover,.movie-info button:hover,.add-cart:hover,.cart-button:hover{filter:brightness(1.08);transform:translateY(-1px)}
+.secondary:hover{border-color:rgba(240,120,25,.5);background:rgba(240,120,25,.07)}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.section-head{margin-top:42px;margin-bottom:18px;gap:14px}.section-head h2{font-size:clamp(20px,2vw,25px);font-weight:850;letter-spacing:-.04em}.section-head p{line-height:1.55}
+.stream-grid{gap:22px}.stream-card{transition:transform .2s}.stream-card:hover{transform:translateY(-3px)}.thumb{border-radius:15px;box-shadow:0 8px 24px rgba(0,0,0,.14)}
+.category-grid{gap:14px}.category-card{border-radius:15px;min-height:126px;transition:transform .2s,border-color .2s,box-shadow .2s}.category-card:hover{transform:translateY(-3px);border-color:rgba(240,120,25,.48);box-shadow:0 12px 28px rgba(0,0,0,.18)}
+.radio-panel,.movie-card,.product-card,.short-card{border-radius:16px;overflow:hidden}.radio-panel{box-shadow:var(--shadow)}.movie-card,.product-card{border:1px solid var(--line);background:var(--panel);transition:transform .2s,border-color .2s}.movie-card:hover,.product-card:hover{transform:translateY(-3px);border-color:rgba(240,120,25,.35)}
+.revenue-section{box-shadow:0 12px 38px rgba(0,0,0,.14)}.revenue-section .product-card{border-radius:13px;background:rgba(17,17,23,.78)}
+.site-footer{padding-top:38px;background:rgba(10,10,14,.96);border-top-color:rgba(255,255,255,.1)}.footer-inner{gap:32px}.footer-title{letter-spacing:1.5px}.footer-links a{line-height:1.6;transition:color .18s}.footer-links.resource-links{gap:9px 14px}.footer-links.resource-links a{white-space:normal}.footer-bottom{line-height:1.6}
+@media(max-width:800px){.layout{grid-template-columns:1fr}.content{padding:20px 16px 54px}.topbar{height:64px}.hero{min-height:290px}.section-head{margin-top:32px}}
+@media(max-width:520px){.hero{padding:24px 20px;border-radius:17px}.hero h1{letter-spacing:-.045em}.hero-actions{flex-wrap:wrap}.hero-actions button{flex:1 1 auto}.stream-grid{gap:18px}.footer-inner{gap:20px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+
+/* Usability and responsive navigation improvements */
+.skip-link{position:fixed;z-index:100;left:12px;top:10px;transform:translateY(-160%);padding:11px 15px;border-radius:9px;background:var(--accent);color:#111;font-weight:800;text-decoration:none}
+.skip-link:focus{transform:translateY(0)}
+.mobile-quicknav{display:none}
+button,a,input,select{touch-action:manipulation}
+button:disabled{opacity:.55;cursor:not-allowed}
+:target{scroll-margin-top:105px}
+@media(max-width:800px){
+ .mobile-quicknav{display:flex;position:sticky;top:64px;z-index:19;gap:7px;overflow-x:auto;padding:9px 12px;background:rgba(10,10,14,.97);border-bottom:1px solid var(--line);scrollbar-width:thin}
+ .mobile-quicknav a{display:flex;align-items:center;justify-content:center;gap:6px;flex:0 0 auto;padding:9px 12px;border:1px solid var(--line);border-radius:999px;background:var(--panel);color:var(--text);font-size:12px;font-weight:750;text-decoration:none;white-space:nowrap}
+ .mobile-quicknav a:active{border-color:var(--accent);background:rgba(240,120,25,.12)}
+ .content{padding-top:18px}
+}
+@media(max-width:420px){.mobile-quicknav{gap:6px}.mobile-quicknav a{padding:8px 10px;font-size:11px}}
+
+/* Local date and weather strip */
+.local-info{max-width:1600px;margin:0 auto;padding:12px clamp(16px,3.2vw,54px);display:flex;align-items:center;justify-content:space-between;gap:18px;border-bottom:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.012)}
+.local-date-wrap,.local-weather-wrap{display:flex;align-items:center;gap:10px;min-width:0}.local-date-wrap{flex-wrap:wrap}.local-info-label{font-size:9px;letter-spacing:1.5px;font-weight:900;color:var(--accent);padding:5px 7px;border:1px solid rgba(240,120,25,.28);border-radius:6px}.local-date-wrap strong,.weather-copy strong{font-size:12px;font-weight:800}.local-time,.weather-copy span{font-size:11px;color:var(--muted)}.local-weather-wrap{margin-left:auto}.weather-symbol{width:34px;height:34px;display:grid;place-items:center;border-radius:10px;background:var(--panel2);font-size:19px}.weather-copy{display:flex;flex-direction:column;gap:1px}.local-weather-wrap>a{margin-left:7px;color:var(--muted);font-size:11px;text-decoration:none;white-space:nowrap}.local-weather-wrap>a:hover{color:var(--text)}
+@media(max-width:520px){.local-info{padding:10px 14px;gap:8px}.local-date-wrap,.local-weather-wrap{gap:7px}.local-date-wrap strong,.weather-copy strong{font-size:11px}.local-time,.weather-copy span,.local-weather-wrap>a{font-size:10px}.weather-symbol{width:30px;height:30px}}
+/* Keep the Build your tribe card visible instead of letting the sidebar flex layout collapse it. */
+.sidebar{overflow-y:auto;overscroll-behavior:contain}
+.tribe-card{flex:0 0 auto;opacity:1;visibility:visible;animation:none}
+.side-footer{flex:0 0 auto}
+
+/* Footer spacing and overflow repair */
+.footer-inner{grid-template-columns:minmax(0,1.7fr) minmax(120px,.8fr) minmax(130px,.9fr) minmax(0,1.5fr);align-items:start}
+.footer-inner>div{min-width:0}
+.footer-links{min-width:0}
+.footer-links a{max-width:100%;overflow-wrap:anywhere;word-break:normal}
+.footer-links.resource-links{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:start;gap:9px 14px}
+.footer-links.resource-links a{min-width:0;width:auto;white-space:normal;line-height:1.45}
+.footer-social-bottom,.footer-bottom{min-width:0}
+@media(max-width:900px){.footer-inner{grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}.footer-about{grid-column:1/-1}.footer-links.resource-links{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:520px){.footer-inner{grid-template-columns:minmax(0,1fr);gap:20px}.footer-about{grid-column:auto}.footer-links.resource-links{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 12px}.footer-social-bottom{margin-top:22px}.footer-bottom{justify-content:center;text-align:center;flex-direction:column;align-items:center;gap:5px}}
+  
+/* Community music-equipment marketplace */
+.marketplace{margin-top:48px;scroll-margin-top:92px}.market-form{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:12px;align-items:end}.market-form label{display:block;margin:0;color:var(--muted);font-size:12px;font-weight:700}.market-form input,.market-form select,.market-form textarea{display:block;box-sizing:border-box;width:100%;margin-top:6px;padding:11px;border:1px solid var(--line);border-radius:9px;background:var(--panel2);color:var(--text);font:inherit;font-size:12px;min-width:0}.market-form textarea{min-height:76px;resize:vertical}.market-form .market-wide{grid-column:1/-1}.market-listings{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px;margin-top:18px}.market-item{border:1px solid var(--line);border-radius:14px;background:var(--panel);padding:16px;min-width:0}.market-icon{height:110px;display:grid;place-items:center;border-radius:10px;background:radial-gradient(circle at 50% 30%,#49301c,#1a1918 70%);font-size:45px;margin-bottom:12px}.market-item h3{font-size:15px;margin:0 0 5px;overflow-wrap:anywhere}.market-item p{font-size:12px;color:var(--muted);line-height:1.5;margin:6px 0;overflow-wrap:anywhere}.market-price{font-weight:900;font-size:17px;color:var(--accent2);margin-top:10px}.market-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.market-actions a,.market-actions button{display:inline-block;border:0;border-radius:8px;padding:9px 12px;background:var(--accent);color:#111;font-size:11px;font-weight:850;text-decoration:none;cursor:pointer}.market-actions button{background:var(--panel2);color:var(--text);border:1px solid var(--line)}
+@media(max-width:520px){.market-listings{grid-template-columns:1fr}.market-form{grid-template-columns:1fr}.market-form .market-wide{grid-column:auto}}
+
+  </style>
+</head>
+<body>
+
+  <section class="auth-screen" id="authScreen" aria-label="URTRIBE STREAM sign in">
+    <div class="auth-card">
+      <div class="auth-logo"><span class="auth-logo-mark">U</span><span>URTRIBE <span class="accent">STREAM</span></span></div>
+      <h1 id="authHeading">Welcome to your tribe</h1>
+      <p class="auth-sub" id="authSub">Sign in to discover live creators, music, radio, and your community.</p>
+      <form class="auth-form" id="authForm">
+        <label id="authNameWrap" hidden>Display name<input id="authName" type="text" autocomplete="nickname" placeholder="Your creator name"></label>
+        <label>Email address<input id="authEmail" type="email" autocomplete="email" placeholder="you@example.com" required></label>
+        <label>Password<input id="authPassword" type="password" autocomplete="current-password" placeholder="At least 6 characters" minlength="6" required></label>
+        <div class="auth-message" id="authMessage" role="status"></div>
+        <button class="auth-submit" id="authSubmit" type="submit">Sign In</button>
+      </form>
+      <div class="auth-links"><button type="button" id="authForgot">Forgot password?</button><span>New here? <button class="auth-switch" type="button" id="authToggle">Create account</button></span></div>
+      <button class="auth-visitor" type="button" id="authVisitor">Continue as visitor</button>
+      <p class="auth-note">Secure account verification and password recovery are not connected yet. Do not enter a password you use elsewhere.</p>
+    </div>
+  </section>
+
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="URTRIBE STREAM home">
+      <span class="brand-mark">U</span>
+      <span>URTRIBE<span class="accent"> STREAM</span></span>
+    </a>
+
+    <div class="search-wrap">
+      <input id="searchInput" type="search" placeholder="Search streams, creators, tribes..." autocomplete="off">
+      <button id="searchBtn" aria-label="Search">⌕</button>
+    </div>
+
+    <nav class="top-actions">
+      <button class="icon-btn" id="themeBtn" title="Toggle theme">☾</button>
+      <button class="go-live" id="goLiveBtn">＋ Go Live</button>
+      <button class="avatar">UT</button>
+    </nav>
+  </header>
+  <nav class="mobile-quicknav" aria-label="Quick navigation">
+    <a href="#mainContent">⌂ <span>Home</span></a>
+    <a href="#streamGrid">● <span>Live creators</span></a>
+    <a href="#radioShop">♫ <span>Radio</span></a>
+    <a href="#movieLounge">▣ <span>Videos</span></a>
+    <a href="#apparelShop">▤ <span>Shop</span></a>
+    <a href="#gearMarketplace">🎛️ <span>Gear</span></a>
+  </nav>
+  <section class="local-info" aria-label="Date and local weather">
+    <div class="local-date-wrap"><span class="local-info-label">TODAY</span><strong id="localDate">Loading date…</strong><span id="localTime" class="local-time"></span></div>
+    <div class="local-weather-wrap"><span class="weather-symbol" id="weatherSymbol" aria-hidden="true">☁</span><div class="weather-copy"><strong id="weatherReading">Weather loading…</strong><span id="weatherDetails">Des Moines, Iowa</span></div><a href="https://www.weather.gov/dmx" target="_blank" rel="noopener noreferrer" aria-label="Open National Weather Service Des Moines forecast">Forecast ↗</a></div>
+  </section>
+
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="side-section">
+        <p class="side-label">DISCOVER</p>
+        <button class="side-link active" data-filter="all">⌂ <span>Home</span></button>
+        <button class="side-link" data-filter="following">♡ <span>Following</span></button>
+        <button class="side-link" data-filter="live">● <span>Live Now</span></button>
+        <button class="side-link" data-filter="new">✦ <span>New Creators</span></button>
+        <button class="side-link" data-scroll="movieLounge">🎬 <span>Movies</span></button>
+        <button class="side-link" data-scroll="apparelShop">🛍 <span>Merch Shop</span></button>
+        <button class="side-link" data-scroll="gearMarketplace">🎛️ <span>Equipment Marketplace</span></button>
+      </div>
+
+      <div class="side-section">
+        <p class="side-label">CATEGORIES</p>
+        <button class="side-link" data-category="Gaming">🎮 <span>Gaming</span></button>
+        <button class="side-link" data-category="Music">♫ <span>Music</span></button>
+        <button class="side-link" data-category="Talk">◉ <span>Talk & Podcasts</span></button>
+        <button class="side-link" data-category="Creative">✎ <span>Creative</span></button>
+        <button class="side-link" data-category="Sports">⚡ <span>Sports</span></button>
+      </div>
+
+      <div class="tribe-card">
+        <div class="tribe-icon">✦</div>
+        <strong>Build your tribe</strong>
+        <p>Follow creators and make your own community.</p>
+        <button id="signupBtn">Join URTRIBE</button>
+      </div>
+
+      <footer class="side-footer">© 2026 URTRIBE STREAM<br>Made for creators & communities</footer>
+    </aside>
+
+    <main class="content" id="mainContent" tabindex="-1">
+      <section class="hero">
+        <div>
+          <span class="eyebrow">THE NEXT GENERATION OF LIVE</span>
+          <h1>Find your people.<br><span>Find your tribe.</span></h1>
+          <p>Watch live creators, discover new communities, and stream what you love.</p>
+          <div class="hero-actions">
+            <button class="primary" id="browseBtn">Explore Live Streams</button>
+            <button class="secondary" id="heroGoLive">Start Streaming</button>
+            <button class="secondary" id="heroShop">Shop Merch</button>
+          </div>
+        </div>
+        <div class="hero-orbit">
+          <div class="orbit-ring ring-one"></div>
+          <div class="orbit-ring ring-two"></div>
+          <div class="orbit-core">U</div>
+          <span class="orb o1">🎮</span><span class="orb o2">♫</span><span class="orb o3">🎨</span>
+        </div>
+      </section>
+
+      <section class="shorts-section" id="shortsFeed">
+        <div class="section-head compact"><div><span class="eyebrow">QUICK WATCH · VERTICAL VIDEO</span><h2>Tribe Shorts <span class="shorts-mark">▶</span></h2><p>Fast clips, studio moments, highlights, and creator stories.</p></div><span class="shorts-hint">Scroll to explore →</span></div>
+        <div class="shorts-rail">
+          <article class="short-card" data-short="Behind the Decks"><div class="short-visual short-v1"><span class="short-play">▶</span><b class="short-label">MUSIC MOMENT</b><span class="short-emoji">🎧</span><small>00:28</small></div><div class="short-meta"><strong>Behind the Decks</strong><span>@URTRIBE Sessions</span></div></article>
+          <article class="short-card" data-short="One Minute Freestyle"><div class="short-visual short-v2"><span class="short-play">▶</span><b class="short-label">FREESTYLE</b><span class="short-emoji">🎤</span><small>00:45</small></div><div class="short-meta"><strong>One Minute Freestyle</strong><span>@MayaV</span></div></article>
+          <article class="short-card" data-short="Creator Setup Tour"><div class="short-visual short-v3"><span class="short-play">▶</span><b class="short-label">CREATOR LIFE</b><span class="short-emoji">🎛️</span><small>00:34</small></div><div class="short-meta"><strong>Creator Setup Tour</strong><span>@CreateWithNia</span></div></article>
+          <article class="short-card" data-short="Skatepark Highlights"><div class="short-visual short-v4"><span class="short-play">▶</span><b class="short-label">HIGHLIGHTS</b><span class="short-emoji">🛹</span><small>00:19</small></div><div class="short-meta"><strong>Skatepark Highlights</strong><span>@TribeMoves</span></div></article>
+          <article class="short-card" data-short="Late Night Loop"><div class="short-visual short-v5"><span class="short-play">▶</span><b class="short-label">BEAT LAB</b><span class="short-emoji">🎹</span><small>00:51</small></div><div class="short-meta"><strong>Late Night Loop</strong><span>@JulesBeats</span></div></article>
+          <button class="short-create" id="createShort"><span>＋</span><strong>Share a Short</strong><small>Add your own clip</small></button>
+        </div>
+      </section>
+
+      <section class="section-head" id="creatorUploadsSection" style="align-items:flex-start;gap:18px;flex-wrap:wrap">
+        <div><span class="eyebrow">CREATOR STUDIO · LOCAL PREVIEW</span><h2>Publish a Video or Short</h2><p>Try the upload workflow with videos saved in this browser.</p></div>
+      </section>
+      <section class="product-card" style="padding:18px;margin-bottom:22px">
+        <form id="videoUploadForm" class="auth-form" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;align-items:end">
+          <label style="margin:0">Video title<input id="uploadVideoTitle" maxlength="90" placeholder="Give your video a title" required></label>
+          <label style="margin:0">Creator name<input id="uploadVideoCreator" maxlength="60" placeholder="Your creator name" required></label>
+          <label style="margin:0">Format<select id="uploadVideoType"><option value="video">Full video</option><option value="short">Short (up to 60 seconds)</option></select></label>
+          <label style="margin:0">Video file<input id="uploadVideoFile" type="file" accept="video/mp4,video/webm,video/ogg,video/quicktime" required></label>
+          <button class="primary" type="submit" id="publishVideoBtn">Save video</button>
+        </form>
+        <p id="videoUploadStatus" class="radio-note" role="status" aria-live="polite">Demo limit: 100 MB per file. Your upload is stored only in this browser, not published for other users.</p>
+      </section>
+      <div id="creatorVideoLibrary" class="movie-grid" aria-live="polite"><p class="muted">No locally saved videos yet.</p></div>
+
+      <section class="section-head">
+        <div>
+          <h2 id="sectionTitle">Live right now</h2>
+          <p id="resultCount">Popular creators streaming now</p>
+        </div>
+        <div class="sort-controls">
+          <button class="sort active" data-sort="popular">Popular</button>
+          <button class="sort" data-sort="recent">Recent</button>
+        </div>
+      </section>
+
+      <section class="stream-grid" id="streamGrid"></section>
+
+
+      <section class="radio-shop" id="radioShop">
+        <div class="section-head compact"><div><span class="eyebrow">TUNE IN · REP YOUR TRIBE</span><h2>URTRIBE Radio</h2><p>Discover sounds from the community.</p></div><span class="live-pill">● ON AIR</span></div>
+        <div class="radio-panel"><div class="radio-art"><div class="radio-disc">U<span>♫</span></div><b>URTRIBE FM</b></div>
+          <div class="radio-details"><span class="radio-kicker">NOW PLAYING · COMMUNITY MIX</span><h3 id="radioTrack">Tribe Frequency</h3><p id="radioArtist">URTRIBE Radio · Independent sounds</p>
+            <div class="radio-progress"><span id="radioProgress"></span></div><div class="radio-time"><span id="radioElapsed">00:00</span><span>URTRIBE RADIO</span><span>03:30</span></div>
+            <div class="radio-controls"><button class="radio-skip" id="prevTrack" type="button" aria-label="Restart stream">↶</button><button class="radio-play" id="radioPlay" type="button" aria-label="Play or pause radio">▶</button><button class="radio-skip" id="radioStop" type="button" aria-label="Stop radio">■</button><span id="radioStatus">Radio off · Press Play to listen</span><label class="volume-control">VOL <input id="radioVolume" type="range" min="0" max="100" value="70"></label></div>
+            <div class="radio-source"><select id="radioGenre" aria-label="Choose radio genre"><option value="chill">Chill / Ambient</option><option value="indie">Indie</option><option value="jazz">Jazz / Global</option><option value="electronic">Electronic</option><option value="lounge">Lounge</option><option value="metal">Metal</option><option value="custom">Custom stream URL</option></select><input id="radioUrl" type="url" value="https://ice1.somafm.com/groovesalad-128-mp3" placeholder="Paste your radio stream URL (MP3/AAC)" aria-label="Radio stream URL"><button id="connectRadio" type="button">Play Radio</button></div><div class="nearby-radio" style="margin:16px 0;padding:15px;border:1px solid var(--line);border-radius:12px;background:var(--panel2)"><span class="radio-kicker">LOCAL RADIO DISCOVERY</span><h3 style="font-size:17px;margin:7px 0">Play radio stations near you</h3><p class="radio-note" style="margin:0 0 10px!important">Share your location to find nearby stations. Location is requested only when you click and is not saved by URTRIBE STREAM.</p><button id="findNearbyRadio" type="button" style="padding:10px 14px;border:0;border-radius:9px;background:var(--accent);color:#111;font-weight:800;cursor:pointer">⌖ Find stations near me</button><div id="nearbyRadioStatus" role="status" aria-live="polite" style="margin-top:10px;font-size:12px;color:var(--muted)">Location permission is optional.</div><div id="nearbyRadioList" style="display:grid;gap:8px;margin-top:10px"></div></div><audio id="radioAudio" class="radio-audio" controls preload="none"></audio><label class="radio-file">Or play an audio file from your device: <input id="radioFile" type="file" accept="audio/*"></label>
+            <div class="creator-radio" style="margin-top:18px;padding:16px;border:1px solid var(--line);border-radius:12px;background:var(--panel2)">
+              <span class="radio-kicker">CREATOR MUSIC · LISTENER CHOICE</span><h3 style="font-size:18px;margin:7px 0">DJs & Artists: Add Your Music</h3>
+              <p class="radio-note" style="margin:0 0 12px!important">Create a DJ mix or upload a track, then save it to this device’s music library. Select Play whenever you want to listen.</p>
+              <form id="creatorTrackForm" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:9px;align-items:center">
+                <input id="creatorTrackTitle" required maxlength="80" placeholder="Track / Mix title" aria-label="Track or mix title" style="min-width:0;padding:10px;border:1px solid var(--line);border-radius:8px;background:#111;color:var(--text)">
+                <input id="creatorTrackArtist" required maxlength="80" placeholder="DJ / Artist name" aria-label="DJ or artist name" style="min-width:0;padding:10px;border:1px solid var(--line);border-radius:8px;background:#111;color:var(--text)">
+                <input id="creatorTrackFile" required type="file" accept="audio/*" aria-label="Choose music file" style="min-width:0;color:var(--muted);font-size:11px">
+                <button type="submit" style="padding:11px 14px;border:0;border-radius:9px;background:var(--accent);color:#111;font-weight:800;cursor:pointer">Save Music</button>
+              </form>
+              <label style="display:block;margin-top:14px;font-size:12px;color:var(--muted)">Your saved music · Search and press Play to listen</label><input id="creatorTrackSearch" type="search" placeholder="Search track or DJ / artist..." aria-label="Search creator tracks" style="width:100%;box-sizing:border-box;margin-top:7px;padding:10px;border:1px solid var(--line);border-radius:8px;background:#111;color:var(--text)"><div id="creatorPlaylist" aria-live="polite" style="margin-top:12px;font-size:12px;color:var(--muted)">Your saved music will appear here.</div>
+              <div class="listener-playlists" style="margin-top:18px;padding:14px;border:1px solid var(--line);border-radius:10px;background:var(--panel)">
+                <span class="radio-kicker">LISTENER PLAYLISTS · OFFLINE READY</span>
+                <p class="radio-note" style="margin:6px 0 10px!important">Create playlists from music saved on this device. Saved audio stays available offline in this browser, as long as site data is not cleared.</p>
+                <form id="listenerPlaylistForm" style="display:flex;gap:8px;flex-wrap:wrap"><input id="listenerPlaylistName" maxlength="60" required placeholder="Playlist name" aria-label="Playlist name" style="flex:1;min-width:140px;padding:10px;border:1px solid var(--line);border-radius:8px;background:#111;color:var(--text)"><button type="submit" style="padding:10px 13px;border:0;border-radius:8px;background:var(--accent);color:#111;font-weight:800;cursor:pointer">Create Playlist</button></form>
+                <label for="listenerPlaylistSelect" style="display:block;margin-top:12px;font-size:12px;color:var(--muted)">Choose playlist to add music to</label><select id="listenerPlaylistSelect" style="width:100%;margin-top:6px;padding:10px;border:1px solid var(--line);border-radius:8px;background:#111;color:var(--text)"><option value="">Create a playlist first</option></select>
+                <label for="creatorPlaylistSelect" style="display:block;margin-top:12px;font-size:12px;color:var(--muted)">Make a playlist from a DJ or artist</label><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px"><select id="creatorPlaylistSelect" aria-label="Choose DJ or artist" style="flex:1;min-width:150px;padding:10px;border:1px solid var(--line);border-radius:8px;background:#111;color:var(--text)"><option value="">Choose a DJ or artist</option></select><button id="createCreatorPlaylist" type="button" style="padding:10px 13px;border:0;border-radius:8px;background:var(--accent);color:#111;font-weight:800;cursor:pointer">Create from creator</button></div>
+                <div id="listenerPlaylistList" aria-live="polite" style="margin-top:10px;font-size:12px;color:var(--muted)">No playlists yet.</div>
+              </div>
+            </div>
+            <p class="radio-note">Use audio you own or have permission to broadcast. Music is saved in this browser on this device. To share it with all listeners and devices, URTRIBE STREAM needs connected online storage and a backend.</p>
+          </div>
+        </div>
+      </section>
+      <section class="movie-section" id="movieLounge">
+        <div class="section-head compact"><div><span class="eyebrow">WATCH TOGETHER</span><h2>URTRIBE Movie Lounge</h2><p>Play films and videos you own or have permission to stream.</p></div><span class="live-pill">▶ ON DEMAND</span></div>
+        <div class="movie-grid">
+          <article class="movie-card"><div class="movie-poster"><span>🎞️</span><b class="movie-tag">INDIE SPOTLIGHT</b></div><div class="movie-info"><h3>Indie Film Night</h3><p>Independent stories and community-made cinema.</p><button type="button" data-movie="Indie Film Night">▶ Watch video</button></div></article>
+          <article class="movie-card"><div class="movie-poster"><span>🎧</span><b class="movie-tag">MUSIC & CULTURE</b></div><div class="movie-info"><h3>Behind the Beat</h3><p>Music documentaries, artist stories, and studio sessions.</p><button type="button" data-movie="Behind the Beat">▶ Watch video</button></div></article>
+          <article class="movie-card"><div class="movie-poster"><span>🌆</span><b class="movie-tag">TRIBE ORIGINALS</b></div><div class="movie-info"><h3>Community Screen</h3><p>Showcase films and videos from your creative community.</p><button type="button" data-movie="Community Screen">▶ Watch video</button></div></article>
+        </div>
+      </section>
+      <section class="revenue-section" id="earnWithUs" style="margin-top:50px;padding:24px;border:1px solid #4b3522;border-radius:18px;background:linear-gradient(130deg,rgba(230,95,0,.12),transparent 60%),var(--panel)">
+        <div class="section-head compact"><div><span class="eyebrow">CREATOR ECONOMY</span><h2>Earn with URTRIBE</h2><p>Build your audience, promote your work, and explore ways to earn with the community.</p></div><span class="live-pill">GROW TOGETHER</span></div>
+        <div class="revenue-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px">
+          <article class="product-card" style="padding:18px"><span class="eyebrow">FOR DJs & ARTISTS</span><h3>Creator Spotlight</h3><p>Ask about featured placement for your profile, mix, or upcoming release.</p><a class="primary" style="display:inline-block;text-decoration:none;padding:10px 14px;border-radius:9px" href="mailto:sales@urtribestream.com?subject=URTRIBE%20Creator%20Spotlight">Request a feature</a></article>
+          <article class="product-card" style="padding:18px"><span class="eyebrow">FOR SUPPORTERS</span><h3>Support the Tribe</h3><p>Help fund independent creators and community programming. Membership payments are not yet enabled.</p><a class="secondary" style="display:inline-block;text-decoration:none;padding:10px 14px;border-radius:9px" href="mailto:sales@urtribestream.com?subject=URTRIBE%20Supporter%20Membership">Ask about membership</a></article>
+          <article class="product-card" style="padding:18px"><span class="eyebrow">FOR BRANDS & EVENTS</span><h3>Sponsorships</h3><p>Explore sponsored sessions, event promotion, and brand partnerships.</p><a class="secondary" style="display:inline-block;text-decoration:none;padding:10px 14px;border-radius:9px" href="mailto:sales@urtribestream.com?subject=URTRIBE%20Sponsorship%20Inquiry">Partner with us</a></article>
+          <article class="product-card" style="padding:18px"><span class="eyebrow">OFFICIAL MERCH</span><h3>Shop URTRIBE</h3><p>Show your support with community merchandise. Secure checkout must be connected before orders can be paid.</p><button class="secondary" type="button" onclick="document.getElementById('apparelShop').scrollIntoView({behavior:'smooth'})">Browse merch</button></article>
+          <article class="product-card" style="padding:18px"><span class="eyebrow">FOR CREATORS</span><h3>Paid Creator Content</h3><p>Plan exclusive mixes, lessons, and behind-the-scenes content for supporters. Paid access is not active yet.</p><a class="secondary" style="display:inline-block;text-decoration:none;padding:10px 14px;border-radius:9px" href="mailto:sales@urtribestream.com?subject=URTRIBE%20Paid%20Creator%20Content">Discuss creator access</a></article>
+          <article class="product-card" style="padding:18px"><span class="eyebrow">FOR EVENT HOSTS</span><h3>Events & Ticketing</h3><p>Promote club nights, livestream sessions, and community events. Ticket sales require a connected ticketing or payment service.</p><a class="secondary" style="display:inline-block;text-decoration:none;padding:10px 14px;border-radius:9px" href="mailto:sales@urtribestream.com?subject=URTRIBE%20Event%20Promotion">Promote an event</a></article>
+        </div>
+        <p class="radio-note" style="margin:14px 0 0!important">These are monetization opportunities and inquiry links, not active paid services. Start by validating demand with creators, fans, and sponsors. Online payments, subscriptions, ticketing, creator payouts, tax handling, and order fulfillment require secure payment and backend integrations; revenue is not guaranteed.</p>
+      </section>
+
+      <section class="shop-section" id="apparelShop"><div class="section-head compact"><div><span class="eyebrow">OFFICIAL MERCH</span><h2>Rep Your Tribe</h2><p>Everyday essentials for the URTRIBE community.</p></div><button class="cart-button" id="cartButton">♧ Cart <span id="cartCount">0</span></button></div><div class="shop-grid" id="shopGrid"></div></section>
+
+      <section class="marketplace" id="gearMarketplace">
+        <div class="section-head compact"><div><span class="eyebrow">COMMUNITY BUY &amp; SELL</span><h2>Music Equipment Marketplace</h2><p>List DJ gear, studio equipment, instruments, and audio accessories for sale.</p></div><span class="live-pill">TRIBE MARKET</span></div>
+        <div class="product-card" style="padding:18px">
+          <h3 style="margin:0 0 8px">List your equipment</h3>
+          <p class="radio-note" style="margin:0 0 14px!important">Add items you own and are authorized to sell. Demo listings are saved only in this browser and are not visible to other users.</p>
+          <form id="marketListingForm" class="market-form">
+            <label>Item name<input id="marketTitle" maxlength="90" placeholder="e.g. DJ controller" required></label>
+            <label>Category<select id="marketCategory" required><option value="">Choose category</option><option>DJ Controllers</option><option>Mixers</option><option>Turntables</option><option>Speakers &amp; Monitors</option><option>Headphones</option><option>Microphones</option><option>Audio Interfaces</option><option>Instruments</option><option>Studio Equipment</option><option>Lighting &amp; Visuals</option><option>Cables &amp; Accessories</option><option>Other</option></select></label>
+            <label>Condition<select id="marketCondition" required><option value="">Choose condition</option><option>New</option><option>Like new</option><option>Good</option><option>Fair</option><option>For parts / repair</option></select></label>
+            <label>Price (USD)<input id="marketPrice" type="number" min="0.01" max="999999" step="0.01" placeholder="150.00" required></label>
+            <label>Seller name<input id="marketSeller" maxlength="60" placeholder="Your name / creator name" required></label>
+            <label>Contact email<input id="marketEmail" type="email" maxlength="120" placeholder="you@example.com" required></label>
+            <label>City / area (optional)<input id="marketLocation" maxlength="80" placeholder="City, State"></label>
+            <label class="market-wide">Description<textarea id="marketDescription" maxlength="500" placeholder="Describe condition, included accessories, and pickup or shipping details."></textarea></label>
+            <button class="primary" type="submit">＋ Publish listing</button>
+          </form>
+          <p id="marketStatus" class="radio-note" role="status" aria-live="polite">Marketplace preview: no checkout, identity verification, or buyer/seller protection is connected.</p>
+        </div>
+        <div class="section-head compact" style="margin-top:22px"><div><h3>Community listings</h3><p>Browse equipment posted on this device.</p></div></div>
+        <div id="marketListings" class="market-listings" aria-live="polite"><p class="muted">No equipment listings yet. Be the first to list an item.</p></div>
+      </section>
+
+      <section class="categories">
+        <div class="section-head compact">
+          <div><h2>Explore categories</h2><p>Find a community that feels like home.</p></div>
+        </div>
+        <div class="category-grid">
+          <button class="category-card gaming" data-category="Gaming"><span>🎮</span><strong>Gaming</strong><small>1.8K live</small></button>
+          <button class="category-card music" data-category="Music"><span>♫</span><strong>Music</strong><small>934 live</small></button>
+          <button class="category-card talk" data-category="Talk"><span>◉</span><strong>Talk</strong><small>621 live</small></button>
+          <button class="category-card creative" data-category="Creative"><span>✎</span><strong>Creative</strong><small>407 live</small></button>
+          <button class="category-card sports" data-category="Sports"><span>⚡</span><strong>Sports</strong><small>302 live</small></button>
+        </div>
+      </section>
+    </main>
+  </div>
+
+
+  <footer class="site-footer" aria-label="Website footer">
+    <div class="footer-inner">
+      <div class="footer-about">
+        <div class="footer-brand">URTRIBE <span>STREAM</span></div>
+        <p class="footer-copy">A home for DJs, artists, creators, and communities. Discover music, tune in to radio, watch creator content, and rep your tribe.</p>
+      </div>
+      <div>
+        <h2 class="footer-title">Explore</h2>
+        <nav class="footer-links" aria-label="Explore links">
+          <a href="#mainContent">Home</a><a href="#movieLounge">Movies &amp; Videos</a><a href="#apparelShop">Merch Shop</a><a href="#streamGrid">Live Creators</a>
+        </nav>
+      </div>
+      <div>
+        <h2 class="footer-title">Community</h2>
+        <nav class="footer-links" aria-label="Community links">
+          <a href="#authScreen" id="footerJoinLink">Join URTRIBE</a><a href="#liveModal" id="footerStudioLink">Creator Studio</a><a href="#radioShop">Radio</a>
+        </nav>
+      </div>
+      <div>
+        <h2 class="footer-title">Resources &amp; Privacy</h2>
+        <nav class="footer-links resource-links" aria-label="Resources and privacy links">
+          <a href="#resourceInfo" data-resource="terms">Terms</a>
+          <a href="#resourceInfo" data-resource="privacy">Privacy</a>
+          <a href="#resourceInfo" data-resource="security">Security</a>
+          <a href="#resourceInfo" data-resource="status">Status</a>
+          <a href="#resourceInfo" data-resource="community">Community</a>
+          <a href="#resourceInfo" data-resource="docs">Help &amp; Guides</a>
+          <a href="mailto:sales@urtribestream.com?subject=URTRIBE%20STREAM%20Support">Contact URTRIBE</a>
+          <a href="#cookieSettings" id="manageCookiesLink">Manage cookies</a>
+          <a href="#privacyOptOut" id="privacyOptOutLink">Do not share my personal information</a>
+        </nav>
+      </div>
+    </div>
+    <div class="footer-social-bottom">
+      <h2 class="footer-title">Share URTRIBE</h2>
+      <nav class="footer-links social-links" aria-label="Share URTRIBE STREAM on social media">
+        <a href="https://www.facebook.com/sharer/sharer.php" data-share="facebook" aria-label="Share on Facebook" title="Facebook" target="_blank" rel="noopener noreferrer"><span class="social-icon social-facebook" aria-hidden="true">f</span></a>
+        <a href="https://twitter.com/intent/tweet" data-share="x" aria-label="Share on X" title="X" target="_blank" rel="noopener noreferrer"><span class="social-icon social-x" aria-hidden="true">𝕏</span></a>
+        <a href="https://wa.me/" data-share="whatsapp" aria-label="Share on WhatsApp" title="WhatsApp" target="_blank" rel="noopener noreferrer"><span class="social-icon social-whatsapp" aria-hidden="true">◉</span></a>
+        <a href="mailto:?subject=URTRIBE%20STREAM" data-share="email" aria-label="Share by email" title="Email"><span class="social-icon social-email" aria-hidden="true">✉</span></a>
+        <button type="button" class="footer-share-copy" id="copySiteLink" aria-label="Copy website link" title="Copy link"><span class="social-icon social-copy" aria-hidden="true">↗</span></button>
+      </nav>
+    </div>
+    <div class="footer-bottom"><span>© 2026 URTRIBE STREAM. All rights reserved.</span><span>Made for creators &amp; communities.</span></div>
+  </footer>
+
+  <div class="modal hidden" id="streamModal">
+    <div class="modal-card stream-modal">
+      <button class="close" data-close>×</button>
+      <div class="player-placeholder" id="streamPlayer">
+        <div class="play-pulse">▶</div>
+        <span id="modalLive">LIVE</span>
+      </div>
+      <div class="modal-body">
+        <div class="modal-title-row">
+          <div>
+            <h2 id="modalTitle">Stream</h2>
+            <p id="modalCreator"></p>
+          </div>
+          <button class="primary follow-btn" id="modalFollow">♡ Follow</button>
+        </div>
+        <div class="chat-box">
+          <div class="chat-head">Live Chat <span id="chatCount">1.2K</span></div>
+          <div class="chat-messages" id="chatMessages">
+            <p><b>Nova:</b> welcome to the tribe!</p>
+            <p><b>Jax:</b> this stream is 🔥</p>
+            <p><b>Sky:</b> first time here!</p>
+          </div>
+          <form id="chatForm"><input id="chatInput" placeholder="Send a message..."><button>Send</button></form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal hidden" id="liveModal">
+    <div class="modal-card">
+      <button class="close" data-close>×</button>
+      <span class="eyebrow">CREATOR STUDIO</span>
+      <h2>Start your URTRIBE stream</h2>
+      <p class="muted">DJs, artists, and producers can create a live listing. Add a hosted playback URL from your streaming provider to let viewers watch or listen.</p>
+      <label>Creator / DJ name<input id="creatorName" placeholder="Your artist or DJ name" maxlength="60"></label>
+      <label>Creator type<select id="creatorRole"><option>DJ</option><option>Artist</option><option>Music Producer</option><option>Podcaster</option><option>Other Creator</option></select></label>
+      <label>Stream title<input id="streamTitle" placeholder="What are you streaming today?" maxlength="100"></label>
+      <label>Hosted live playback URL (optional)<input id="creatorStreamUrl" type="url" placeholder="https://your-provider.com/live/stream.m3u8"></label>
+      <label>Category
+        <select id="streamCategory">
+          <option>Gaming</option><option>Music</option><option>Talk</option><option>Creative</option><option>Sports</option>
+        </select>
+      </label>
+      <div class="software-connect" style="margin:14px 0;padding:15px;border:1px solid var(--line);border-radius:14px;background:linear-gradient(145deg,rgba(230,95,0,.09),#0b0b10)">
+        <span class="eyebrow">DJ & STUDIO CONNECTION</span>
+        <h3 style="margin:7px 0 5px">Broadcast with your software</h3>
+        <p class="muted" style="font-size:12px;line-height:1.5;margin:0 0 12px">Choose your setup to see how to route its sound into your broadcast. OBS Studio is the recommended bridge for combining audio, cameras, and visuals.</p>
+        <label>DJ / studio software<select id="broadcastSoftware"><option value="obs">OBS Studio</option><option value="virtualdj">VirtualDJ</option><option value="serato">Serato DJ Pro</option><option value="rekordbox">rekordbox</option><option value="ableton">Ableton Live</option><option value="traktor">Traktor</option><option value="mixxx">Mixxx</option><option value="flstudio">FL Studio</option><option value="streamlabs">Streamlabs</option><option value="vmix">vMix</option><option value="other">Other DJ / studio software</option></select></label>
+        <div id="softwareInstructions" style="margin-top:10px;padding:12px;border-radius:10px;background:#14141b;border:1px solid #2c2c36;font-size:12px;line-height:1.6">Use OBS to add your camera and audio input, then configure OBS with a supported live-stream provider. This site still needs a streaming server connection for URTRIBE playback.</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:11px"><a href="https://obsproject.com/" target="_blank" rel="noopener noreferrer" class="secondary" style="text-decoration:none;font-size:12px">Get OBS Studio ↗</a><a href="https://support.serato.com/" target="_blank" rel="noopener noreferrer" class="secondary" style="text-decoration:none;font-size:12px">Serato Help ↗</a><a href="https://rekordbox.com/" target="_blank" rel="noopener noreferrer" class="secondary" style="text-decoration:none;font-size:12px">rekordbox ↗</a></div>
+      </div>
+      <section class="software-connect" aria-label="DJ studio and video tools" style="margin:14px 0;padding:15px;border:1px solid var(--line);border-radius:14px;background:#0b0b10">
+        <span class="eyebrow">CREATOR TOOLKIT</span>
+        <h3 style="margin:7px 0 5px">DJ, studio & video tools</h3>
+        <p class="muted" style="font-size:12px;line-height:1.5">Open official software pages for mixing, recording, streaming, editing and visuals. These are external tools—not plugins installed into URTRIBE STREAM. Choose tools compatible with your device and check their licensing.</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:8px;margin-top:12px">
+          <a class="secondary" style="text-decoration:none;text-align:center;font-size:12px" target="_blank" rel="noopener noreferrer" href="https://obsproject.com/">OBS Studio ↗</a>
+          <a class="secondary" style="text-decoration:none;text-align:center;font-size:12px" target="_blank" rel="noopener noreferrer" href="https://streamlabs.com/">Streamlabs ↗</a>
+          <a class="secondary" style="text-decoration:none;text-align:center;font-size:12px" target="_blank" rel="noopener noreferrer" href="https://www.vmix.com/">vMix ↗</a>
+          <a class="secondary" style="text-decoration:none;text-align:center;font-size:12px" target="_blank" rel="noopener noreferrer" href="https://www.virtualdj.com/">VirtualDJ ↗</a>
+          <a class="secondary" style="text-decoration:none;text-align:center;font-size:12px" target="_blank" rel="noopener noreferrer" href="https://serato.com/dj/pro">Serato DJ ↗</a>
+          <a class="secondary" style="text-decoration:none;text-align:center;font-size:12px" target="_blank" rel="noopener noreferrer" href="https://rekordbox.com/">rekordbox ↗</a>
+          <a class="secondary" style="text-decoration:none;text-align:center;font-size:12px" target="_blank" rel="noopener noreferrer" href="https://www.native-instruments.com/en/products/traktor/">Traktor ↗</a>
+          <a class="secondary" style="text-decoration:none;text-align:center;font-size:12px" target="_blank" rel="noopener noreferrer" href="https://mixxx.org/">Mixxx ↗</a>
+          <a class="secondary" style="text-decoration:none;text-align:center;font-size:12px" target="_blank" rel="noopener noreferrer" href="https://www.ableton.com/live/">Ableton Live ↗</a>
+          <a class="secondary" style="text-decoration:none;text-align:center;font-size:12px" target="_blank" rel="noopener noreferrer" href="https://www.image-line.com/">FL Studio ↗</a>
+          <a class="secondary" style="text-decoration:none;text-align:center;font-size:12px" target="_blank" rel="noopener noreferrer" href="https://www.audacityteam.org/">Audacity ↗</a>
+          <a class="secondary" style="text-decoration:none;text-align:center;font-size:12px" target="_blank" rel="noopener noreferrer" href="https://www.blackmagicdesign.com/products/davinciresolve">DaVinci Resolve ↗</a>
+          <a class="secondary" style="text-decoration:none;text-align:center;font-size:12px" target="_blank" rel="noopener noreferrer" href="https://www.adobe.com/products/premiere.html">Premiere Pro ↗</a>
+          <a class="secondary" style="text-decoration:none;text-align:center;font-size:12px" target="_blank" rel="noopener noreferrer" href="https://www.capcut.com/">CapCut ↗</a>
+          <a class="secondary" style="text-decoration:none;text-align:center;font-size:12px" target="_blank" rel="noopener noreferrer" href="https://www.resolume.com/">Resolume Visuals ↗</a>
+        </div>
+      </section>
+      <div class="broadcast-preview" style="margin:14px 0;padding:12px;border:1px solid var(--line);border-radius:12px;background:#09090d">
+        <video id="creatorPreview" autoplay muted playsinline style="display:none;width:100%;max-height:260px;object-fit:contain;background:#000;border-radius:8px"></video>
+        <div id="previewPlaceholder" style="min-height:95px;display:grid;place-items:center;color:var(--muted);font-size:12px">📹 Camera / microphone preview</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="secondary" type="button" id="previewBroadcast">Enable Camera & Mic</button><button class="secondary" type="button" id="stopPreview" disabled>Stop Preview</button><span id="broadcastStatus" class="radio-status" style="align-self:center">Camera is off</span></div>
+      </div>
+      <p class="radio-note">Camera preview works in a secure site (HTTPS) or on localhost. To broadcast to viewers on other devices, connect a live-streaming provider/server and paste its viewer playback URL above. Camera and microphone are previewed on this device. Public broadcasting requires a connected streaming provider.</p>
+      <button class="primary full" id="startLiveListing">Create Live Listing</button>
+    </div>
+  </div>
+
+  <div class="modal hidden" id="cartModal"><div class="modal-card cart-card"><button class="close" data-close>×</button><span class="eyebrow">YOUR SHOPPING BAG</span><h2>Your Cart</h2><div id="cartItems" class="cart-items"><p class="muted">Your cart is empty.</p></div><div class="cart-total"><span>Subtotal</span><strong id="cartTotal">$0.00</strong></div><button class="primary full" id="checkoutBtn">Continue to Checkout</button><p class="radio-note">Cart items are kept in this browser. Secure online checkout is not connected yet.</p></div></div>
+  <div class="modal hidden" id="movieModal"><div class="modal-card movie-modal"><button class="close" data-close aria-label="Close">×</button><span class="eyebrow">URTRIBE MOVIE LOUNGE</span><h2 id="movieTitle">Watch video</h2><p class="muted">Paste a direct video URL or a supported YouTube/Vimeo link, or choose a video file from your device. Playback starts only when you press play.</p><div class="movie-player"><video id="movieVideo" controls playsinline preload="none"></video><iframe id="movieEmbed" title="Embedded movie" style="display:none;width:100%;aspect-ratio:16/9;border:0;background:#000" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div><label>Video URL (MP4/WebM, YouTube, or Vimeo)<div class="movie-url-row"><input id="movieUrl" type="url" placeholder="Paste a video link from YouTube, Vimeo, or MP4"><button class="primary" id="loadMovie" type="button">Load video</button></div></label><label>Or choose a video file<input id="movieFile" type="file" accept="video/mp4,video/webm,video/ogg"></label><p class="movie-help">Use videos you own, have licensed, or are authorized to share. This standalone site does not provide a movie catalog or hosting service.</p></div></div>
+  <div class="modal hidden" id="profileModal" role="dialog" aria-modal="true" aria-labelledby="profileHeading">
+    <div class="modal-card">
+      <button class="close" data-close aria-label="Close">×</button>
+      <span class="eyebrow">YOUR URTRIBE IDENTITY</span><h2 id="profileHeading">Creator & Member Profile</h2>
+      <p class="muted">Customize how you appear in this browser preview.</p>
+      <form id="profileForm" class="auth-form">
+        <label>Display name<input id="profileDisplayName" maxlength="60" placeholder="Your name or stage name" required></label>
+        <label>Profile type<select id="profileType"><option>Listener</option><option>DJ</option><option>Artist</option><option>Music Producer</option><option>Podcaster</option><option>Video Creator</option></select></label>
+        <label>Bio<textarea id="profileBio" maxlength="240" rows="3" placeholder="Tell your tribe about yourself"></textarea></label>
+        <button class="primary full" type="submit">Save Profile</button>
+      </form>
+      <p class="radio-note">Preview profile is saved only in this browser. Secure accounts and synced profiles require authentication and database services.</p>
+    </div>
+  </div>
+  <div class="toast hidden" id="toast"></div>
+  <script>
+const streams = [
+  {id:1,title:"Ranked Night — Road to Masters",creator:"KaiNova",cat:"Gaming",viewers:18420,emoji:"🎮",avatar:"KN",following:true,recent:9},
+  {id:2,title:"Late Night Studio Sessions",creator:"Maya V",cat:"Music",viewers:9210,emoji:"♫",avatar:"MV",following:false,recent:4},
+  {id:3,title:"The Tribe Table — Open Mic",creator:"JulesTalks",cat:"Talk",viewers:7310,emoji:"🎙️",avatar:"JT",following:true,recent:7},
+  {id:4,title:"Building a Dream Brand LIVE",creator:"CreateWithNia",cat:"Creative",viewers:5480,emoji:"🎨",avatar:"CN",following:false,recent:2},
+  {id:5,title:"Championship Watch Party",creator:"ZoneSports",cat:"Sports",viewers:12880,emoji:"⚡",avatar:"ZS",following:false,recent:6},
+  {id:6,title:"Cozy Co-Op With The Tribe",creator:"RexPlays",cat:"Gaming",viewers:4620,emoji:"🕹️",avatar:"RP",following:true,recent:1},
+  {id:7,title:"Acoustic Requests & Chat",creator:"LunaStrings",cat:"Music",viewers:3180,emoji:"🎸",avatar:"LS",following:false,recent:3},
+  {id:8,title:"Design Critique Friday",creator:"PixelAri",cat:"Creative",viewers:2060,emoji:"✏️",avatar:"PA",following:false,recent:8}
+];
+
+let currentFilter = "all";
+let sortMode = "popular";
+let activeStreamId = null;
+let savedFollows = null;
+try { const stored = localStorage.getItem("urtribe_following"); if (stored !== null) savedFollows = new Set(JSON.parse(stored).map(String)); } catch(e) {}
+if (savedFollows) streams.forEach(s => s.following = savedFollows.has(String(s.id)));
+let likedStreams = new Set();
+try { likedStreams = new Set(JSON.parse(localStorage.getItem("urtribe_likes") || "[]").map(String)); } catch(e) {}
+
+const grid = document.getElementById("streamGrid");
+const title = document.getElementById("sectionTitle");
+const count = document.getElementById("resultCount");
+
+function formatViews(n){ return n >= 1000 ? (n/1000).toFixed(n >= 10000 ? 0 : 1)+"K" : n; }
+
+function render(data = streams){
+  let filtered = [...data];
+  if(currentFilter === "following") filtered = filtered.filter(s=>s.following);
+  if(currentFilter === "live") filtered = filtered.filter(()=>true);
+  if(currentFilter === "new") filtered = filtered.filter(s=>s.recent <= 3);
+  if(["Gaming","Music","Talk","Creative","Sports"].includes(currentFilter)) filtered = filtered.filter(s=>s.cat===currentFilter);
+  if(sortMode === "popular") filtered.sort((a,b)=>b.viewers-a.viewers);
+  else filtered.sort((a,b)=>a.recent-b.recent);
+
+  grid.innerHTML = filtered.map(s=>`
+    <article class="stream-card" data-id="${s.id}">
+      <div class="thumb">
+        <span class="live-badge">LIVE</span>
+        <span class="emoji">${s.emoji}</span>
+        <span class="viewer-badge">● ${formatViews(s.viewers)} watching</span>
+      </div>
+      <div class="stream-info">
+        <div class="creator-avatar">${s.avatar}</div>
+        <div><h3>${escapeHtml(s.title)}</h3><p>${escapeHtml(s.creator)} · ${s.role ? escapeHtml(s.role)+" · " : ""}${s.cat}</p></div>
+      </div>
+      <div class="card-actions"><button type="button" class="card-like ${likedStreams.has(String(s.id)) ? "is-liked" : ""}" data-like-id="${s.id}" aria-pressed="${likedStreams.has(String(s.id))}">${likedStreams.has(String(s.id)) ? "♥ Liked" : "♡ Like"} · ${s.likes || 0}</button><button type="button" class="card-follow ${s.following ? "is-following" : ""}" data-follow-id="${s.id}">${s.following ? "✓ Following" : "♡ Follow"}</button></div>
+    </article>`).join("");
+
+  document.querySelectorAll(".stream-card").forEach(card=>card.addEventListener("click",()=>openStream(Number(card.dataset.id))));
+  document.querySelectorAll("[data-follow-id]").forEach(btn=>btn.addEventListener("click",e=>{e.stopPropagation();toggleFollow(Number(btn.dataset.followId));}));
+  document.querySelectorAll("[data-like-id]").forEach(btn=>btn.addEventListener("click",e=>{e.stopPropagation();toggleLike(Number(btn.dataset.likeId));}));
+  count.textContent = `${filtered.length} live ${filtered.length === 1 ? "creator" : "creators"} in this view`;
+}
+function escapeHtml(v){return v.replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));}
+
+function setFilter(filter){
+  currentFilter=filter;
+  document.querySelectorAll(".side-link").forEach(b=>b.classList.remove("active"));
+  const side = [...document.querySelectorAll(".side-link")].find(b=>b.dataset.filter===filter || b.dataset.category===filter);
+  if(side) side.classList.add("active");
+  title.textContent = filter==="all" ? "Live right now" : filter==="following" ? "Creators you follow" : filter==="new" ? "New creators" : filter==="live" ? "Live right now" : filter;
+  render();
+  document.getElementById("streamGrid").scrollIntoView({behavior:"smooth",block:"start"});
+}
+
+document.querySelectorAll(".side-link").forEach(b=>b.addEventListener("click",()=>setFilter(b.dataset.filter || b.dataset.category)));
+document.querySelectorAll(".category-card").forEach(b=>b.addEventListener("click",()=>setFilter(b.dataset.category)));
+document.querySelectorAll(".sort").forEach(b=>b.addEventListener("click",()=>{
+  sortMode=b.dataset.sort;
+  document.querySelectorAll(".sort").forEach(x=>x.classList.remove("active"));
+  b.classList.add("active"); render();
+}));
+
+document.getElementById("searchBtn").addEventListener("click", search);
+document.getElementById("searchInput").addEventListener("keydown",e=>{if(e.key==="Enter")search()});
+function search(){
+  const q=document.getElementById("searchInput").value.trim().toLowerCase();
+  if(!q){render(); return;}
+  const results=streams.filter(s=>`${s.title} ${s.creator} ${s.cat}`.toLowerCase().includes(q));
+  title.textContent=`Search: ${q}`;
+  count.textContent=`${results.length} matching stream${results.length===1?"":"s"}`;
+  grid.innerHTML="";
+  render(results);
+}
+
+function toggleFollow(id){
+  const s=streams.find(x=>x.id===id); if(!s)return;
+  s.following=!s.following;
+  try { localStorage.setItem("urtribe_following",JSON.stringify(streams.filter(x=>x.following).map(x=>String(x.id)))); } catch(e) {}
+  if(activeStreamId===id){const b=document.getElementById("modalFollow");b.textContent=s.following?"✓ Following":"♡ Follow";}
+  render();
+  showToast(s.following?`Following ${s.creator}!`:`Unfollowed ${s.creator}`);
+}
+function toggleLike(id){
+  const s=streams.find(x=>x.id===id); if(!s)return;
+  const key=String(id); if(likedStreams.has(key)){likedStreams.delete(key);s.likes=Math.max(0,(s.likes||0)-1);}else{likedStreams.add(key);s.likes=(s.likes||0)+1;}
+  try{localStorage.setItem("urtribe_likes",JSON.stringify([...likedStreams]));}catch(e){}
+  render(); showToast(likedStreams.has(key)?`You liked ${s.creator}!`:`Like removed from ${s.creator}`);
+}
+function openStream(id){
+  const s=streams.find(x=>x.id===id); if(!s)return;
+  activeStreamId=id;
+  document.getElementById("modalFollow").textContent=s.following?"✓ Following":"♡ Follow";
+  document.getElementById("modalTitle").textContent=s.title;
+  document.getElementById("modalCreator").textContent=`${s.creator}${s.role ? " · "+s.role : ""} · ${s.cat} · ${formatViews(s.viewers)} watching`;
+  const player=document.getElementById("streamPlayer");
+  player.innerHTML="";
+  if(s.streamUrl){
+    const media=document.createElement("video");media.controls=true;media.autoplay=true;media.playsInline=true;media.style.cssText="width:100%;height:100%;max-height:480px;background:#000;object-fit:contain";media.src=s.streamUrl;player.appendChild(media);
+    media.play().catch(()=>{});
+  } else { player.innerHTML='<div class="play-pulse">▶</div><span id="modalLive">LIVE</span><small style="position:absolute;bottom:18px;color:#bbb">Creator live playback URL not provided</small>'; }
+  document.getElementById("streamModal").classList.remove("hidden");
+}
+function closeModals(){document.querySelectorAll(".modal").forEach(m=>m.classList.add("hidden"))}
+document.querySelectorAll("[data-close]").forEach(b=>b.addEventListener("click",closeModals));
+document.querySelectorAll(".modal").forEach(m=>m.addEventListener("click",e=>{if(e.target===m)closeModals()}));
+
+function showToast(msg){
+  const t=document.getElementById("toast");t.textContent=msg;t.classList.remove("hidden");
+  setTimeout(()=>t.classList.add("hidden"),2200);
+}
+document.getElementById("themeBtn").addEventListener("click",()=>{
+  document.body.classList.toggle("light");
+  document.getElementById("themeBtn").textContent=document.body.classList.contains("light")?"☀":"☾";
+});
+document.getElementById("browseBtn").addEventListener("click",()=>document.getElementById("streamGrid").scrollIntoView({behavior:"smooth"}));
+document.getElementById("heroShop").addEventListener("click",()=>document.getElementById("apparelShop").scrollIntoView({behavior:"smooth",block:"start"}));
+document.querySelectorAll("[data-scroll]").forEach(b=>b.addEventListener("click",()=>document.getElementById(b.dataset.scroll)?.scrollIntoView({behavior:"smooth",block:"start"})));
+document.getElementById("signupBtn").addEventListener("click",()=>{const screen=document.getElementById("authScreen");screen.classList.remove("hidden");document.getElementById("authToggle").click();});
+document.getElementById('footerJoinLink')?.addEventListener('click',e=>{e.preventDefault();const screen=document.getElementById('authScreen');screen.classList.remove('hidden');document.getElementById('authToggle').click();});
+document.getElementById('footerStudioLink')?.addEventListener('click',e=>{e.preventDefault();document.getElementById('liveModal').classList.remove('hidden');});
+const profileModal=document.getElementById("profileModal");
+const profileForm=document.getElementById("profileForm");
+const profileFields={name:document.getElementById("profileDisplayName"),type:document.getElementById("profileType"),bio:document.getElementById("profileBio")};
+function openProfile(){let saved={};try{saved=JSON.parse(localStorage.getItem("urtribeProfile")||"{}");}catch(e){}profileFields.name.value=saved.name||"";profileFields.type.value=saved.type||"Listener";profileFields.bio.value=saved.bio||"";profileModal.classList.remove("hidden");}
+document.querySelector(".avatar").addEventListener("click",openProfile);
+profileForm.addEventListener("submit",e=>{e.preventDefault();const data={name:profileFields.name.value.trim(),type:profileFields.type.value,bio:profileFields.bio.value.trim()};if(!data.name)return;try{localStorage.setItem("urtribeProfile",JSON.stringify(data));}catch(e){}document.querySelector(".avatar").textContent=data.name.slice(0,2).toUpperCase();profileModal.classList.add("hidden");showToast("Profile saved in this browser preview.");});
+document.getElementById("modalFollow").addEventListener("click",()=>{if(activeStreamId!==null)toggleFollow(activeStreamId);});
+document.getElementById("chatForm").addEventListener("submit",e=>{
+  e.preventDefault();const input=document.getElementById("chatInput");const v=input.value.trim();if(!v)return;
+  const p=document.createElement("p");p.innerHTML=`<b>You:</b> ${escapeHtml(v)}`;
+  document.getElementById("chatMessages").appendChild(p);input.value="";
+  document.getElementById("chatMessages").scrollTop=99999;
+});
+const liveModal=document.getElementById("liveModal");
+let creatorMediaStream=null;
+const creatorPreview=document.getElementById("creatorPreview");
+const broadcastStatus=document.getElementById("broadcastStatus");
+const softwareGuide={
+  obs:"OBS Studio: Add your camera with Sources → + → Video Capture Device. Add your DJ mixer, audio interface, or virtual audio input with Audio Input Capture. Check the mixer meter, then configure OBS Settings → Stream with your streaming provider. A provider/server must issue the stream destination and key; never share private stream keys in the website.",
+  virtualdj:"VirtualDJ: Keep VirtualDJ as your mixing source. Route its master output through your audio interface or a compatible virtual audio device, then select that input in OBS (Sources → + → Audio Input Capture). Add your camera in OBS and configure a supported streaming provider. Audio routing depends on your controller and operating system.",
+  serato:"Serato DJ Pro: In Setup → Audio, enable Make Audio Available to Other Applications if supported, and install the offered virtual audio device. In OBS, add that virtual device as an Audio Input Capture and add your camera. Confirm the OBS audio meter moves before streaming. Exact options vary by OS and hardware.",
+  rekordbox:"rekordbox: Route the mixer/controller master output to an audio interface or supported computer audio input, then add that input in OBS as Audio Input Capture. Add a camera or screen source as needed. Some rekordbox/OBS capture workflows vary by operating system and hardware; test audio before going live.",
+  ableton:"Ableton Live: Route the Master output to an audio interface or virtual audio device, then choose that device as an Audio Input Capture in OBS. Add a camera, screen capture, or visuals as OBS sources. Use headphones and check levels to avoid feedback or clipping.",
+  traktor:"Traktor: Route the master output through a supported audio interface or virtual audio device, then select that input in OBS. Add your camera and visuals in OBS, monitor levels, and test before streaming.",
+  mixxx:"Mixxx: Select your audio interface in Mixxx preferences, route master output to a capture-capable input, and add that input to OBS. Confirm audio levels and streaming permissions before going live.",
+  flstudio:"FL Studio: Route the mixer master output through an audio interface or compatible virtual audio device, select it in OBS as an audio source, and add camera or screen capture as needed.",
+  streamlabs:"Streamlabs: Set up your scenes, camera, microphone, and audio sources in Streamlabs Desktop. Connect only to a supported streaming provider using credentials kept private.",
+  vmix:"vMix: Add camera, media, and audio inputs in vMix, configure the output for your streaming provider, and test audio/video before broadcasting.",
+  other:"Other software: Route its master audio output to an audio interface or compatible virtual audio device, select that device in OBS as Audio Input Capture, then add camera and visuals. Confirm you have permission to stream all music and samples."
+};
+const softwarePicker=document.getElementById("broadcastSoftware");const softwareInstructions=document.getElementById("softwareInstructions");if(softwarePicker&&softwareInstructions){softwarePicker.addEventListener("change",()=>{softwareInstructions.textContent=softwareGuide[softwarePicker.value]||softwareGuide.other;});}
+const stopCreatorPreview=()=>{if(creatorMediaStream){creatorMediaStream.getTracks().forEach(track=>track.stop());creatorMediaStream=null;}creatorPreview.srcObject=null;creatorPreview.style.display="none";document.getElementById("previewPlaceholder").style.display="grid";document.getElementById("previewBroadcast").disabled=false;document.getElementById("stopPreview").disabled=true;broadcastStatus.textContent="Camera is off";};
+document.getElementById("previewBroadcast").addEventListener("click",async()=>{try{if(!navigator.mediaDevices?.getUserMedia)throw new Error("Camera access requires HTTPS or localhost.");creatorMediaStream=await navigator.mediaDevices.getUserMedia({video:true,audio:true});creatorPreview.srcObject=creatorMediaStream;creatorPreview.style.display="block";document.getElementById("previewPlaceholder").style.display="none";document.getElementById("previewBroadcast").disabled=true;document.getElementById("stopPreview").disabled=false;broadcastStatus.textContent="Preview active · only visible on this device";}catch(err){broadcastStatus.textContent=err.message||"Camera/mic permission was not granted";showToast(broadcastStatus.textContent);}});
+document.getElementById("stopPreview").addEventListener("click",stopCreatorPreview);
+["goLiveBtn","heroGoLive"].forEach(id=>document.getElementById(id).addEventListener("click",()=>liveModal.classList.remove("hidden")));
+document.getElementById("startLiveListing").addEventListener("click",()=>{
+  const t=document.getElementById("streamTitle").value.trim() || "My first URTRIBE stream";
+  const creator=document.getElementById("creatorName").value.trim() || "New Creator";
+  const role=document.getElementById("creatorRole").value;
+  const cat=document.getElementById("streamCategory").value;
+  const rawUrl=document.getElementById("creatorStreamUrl").value.trim();
+  let streamUrl="";
+  if(rawUrl){try{const u=new URL(rawUrl);if(!["http:","https:"].includes(u.protocol))throw new Error();streamUrl=u.href;}catch(e){showToast("Enter a valid https:// playback URL");return;}}
+  streams.unshift({id:Date.now(),title:t,creator,role,streamUrl,cat,viewers:1,emoji:"🔴",avatar:creator.slice(0,2).toUpperCase(),following:true,recent:0,likes:0});
+  document.getElementById("streamTitle").value="";document.getElementById("creatorName").value="";document.getElementById("creatorStreamUrl").value="";
+  closeModals();stopCreatorPreview();render();showToast(streamUrl?"Live listing created. Playback URL attached.":"Listing created. Connect a streaming provider to broadcast to viewers.");
+});
+render();
+
+// URTRIBE Movie Lounge: user-supplied authorized video playback
+const movieModal=document.getElementById("movieModal");
+const movieVideo=document.getElementById("movieVideo");
+const movieUrl=document.getElementById("movieUrl");
+const movieEmbed=document.getElementById("movieEmbed");
+function clearMoviePlayer(){movieVideo.pause();movieVideo.removeAttribute("src");movieVideo.load();movieEmbed.removeAttribute("src");movieEmbed.style.display="none";movieVideo.style.display="block";}
+function getEmbedUrl(raw){const u=new URL(raw);if(!["http:","https:"].includes(u.protocol))throw new Error();const host=u.hostname.toLowerCase().replace(/^www\./,"");let id="";if(host==="youtu.be")id=u.pathname.split("/").filter(Boolean)[0]||"";else if(host.endsWith("youtube.com")){if(u.pathname==="/watch")id=u.searchParams.get("v")||"";else if(/^\/(embed|shorts)\//.test(u.pathname))id=u.pathname.split("/")[2]||"";}if(id&&/^[\w-]{6,}$/.test(id))return "https://www.youtube-nocookie.com/embed/"+id;if(host==="vimeo.com"||host.endsWith(".vimeo.com")){const m=u.pathname.match(/\/(?:video\/)?(\d+)/);if(m)return "https://player.vimeo.com/video/"+m[1];}return null;}
+document.querySelectorAll("[data-movie]").forEach(button=>button.addEventListener("click",()=>{
+  document.getElementById("movieTitle").textContent=button.dataset.movie;
+  clearMoviePlayer();movieUrl.value="";
+  document.getElementById("movieFile").value="";movieModal.classList.remove("hidden");
+}));
+function openShort(title){
+  document.getElementById("movieTitle").textContent=title;
+  clearMoviePlayer();movieUrl.value="";
+  document.getElementById("movieFile").value="";movieModal.classList.remove("hidden");
+}
+document.querySelectorAll("[data-short]").forEach(card=>card.addEventListener("click",()=>openShort(card.dataset.short)));
+document.getElementById("createShort").addEventListener("click",()=>openShort("Share a Short"));
+document.getElementById("loadMovie").addEventListener("click",()=>{
+  const raw=movieUrl.value.trim();if(!raw){showToast("Paste a video URL first");return;}
+  try{const url=new URL(raw);if(!["http:","https:"].includes(url.protocol))throw new Error();const embed=getEmbedUrl(url.href);if(embed){movieVideo.pause();movieVideo.removeAttribute("src");movieVideo.load();movieVideo.style.display="none";movieEmbed.src=embed;movieEmbed.style.display="block";showToast("Video embedded — press play in the player");}else{clearMoviePlayer();movieVideo.src=url.href;movieVideo.load();showToast("Video loaded — press play to watch");}}
+  catch(e){showToast("Enter a valid YouTube, Vimeo, or direct video URL");}
+});
+document.getElementById("movieFile").addEventListener("change",e=>{const file=e.target.files&&e.target.files[0];if(!file)return;clearMoviePlayer();movieVideo.src=URL.createObjectURL(file);movieVideo.load();showToast("Video ready — press play to watch");});
+movieModal.addEventListener("click",e=>{if(e.target===movieModal){clearMoviePlayer();movieModal.classList.add("hidden");}});
+movieModal.querySelector("[data-close]").addEventListener("click",()=>{clearMoviePlayer();movieModal.classList.add("hidden");});
+
+// URTRIBE Radio: HTML5 audio streaming and local audio-file playback
+const radioAudio=document.getElementById("radioAudio");
+const radioUrl=document.getElementById("radioUrl");
+const radioStatus=document.getElementById("radioStatus");
+const radioPlay=document.getElementById("radioPlay");
+const radioVolume=document.getElementById("radioVolume");
+const radioGenre=document.getElementById("radioGenre");
+const radioStations={
+ chill:{name:"Chill / Ambient",station:"SomaFM Groove Salad",url:"https://ice1.somafm.com/groovesalad-128-mp3"},
+ indie:{name:"Indie",station:"SomaFM Indie Pop Rocks",url:"https://ice1.somafm.com/indiepop-128-mp3"},
+ jazz:{name:"Jazz / Global",station:"SomaFM Sonic Universe",url:"https://ice1.somafm.com/sonicuniverse-128-mp3"},
+ electronic:{name:"Electronic",station:"SomaFM DEF CON Radio",url:"https://ice1.somafm.com/defcon-128-mp3"},
+ lounge:{name:"Lounge",station:"SomaFM Secret Agent",url:"https://ice1.somafm.com/secretagent-128-mp3"},
+ metal:{name:"Metal",station:"SomaFM Metal Detector",url:"https://ice1.somafm.com/metal-128-mp3"}
+};
+// Find playable public radio stations near the listener after explicit location consent.
+const nearbyButton=document.getElementById("findNearbyRadio"),nearbyStatus=document.getElementById("nearbyRadioStatus"),nearbyList=document.getElementById("nearbyRadioList");
+nearbyButton.addEventListener("click",()=>{
+ if(!navigator.geolocation){nearbyStatus.textContent="Location is not supported. Choose a genre or paste a stream URL above.";return;}
+ nearbyButton.disabled=true;nearbyStatus.textContent="Requesting location permission…";
+ navigator.geolocation.getCurrentPosition(async pos=>{
+  nearbyStatus.textContent="Searching nearby stations…";
+  try{
+   const {latitude,longitude}=pos.coords;
+   const endpoint=`https://de1.api.radio-browser.info/json/stations/search?latitude=${encodeURIComponent(latitude)}&longitude=${encodeURIComponent(longitude)}&hidebroken=true&order=clickcount&reverse=true&limit=8`;
+   const response=await fetch(endpoint,{headers:{Accept:"application/json"}});if(!response.ok)throw new Error("Directory unavailable");
+   const stations=await response.json(),playable=stations.filter(st=>st.url_resolved&&/^https?:\/\//i.test(st.url_resolved));nearbyList.replaceChildren();
+   if(!playable.length){nearbyStatus.textContent="No playable nearby stations found. Try a genre or direct stream URL.";return;}
+   playable.forEach(st=>{const card=document.createElement("div");card.style.cssText="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px;border:1px solid var(--line);border-radius:9px;background:var(--panel)";const info=document.createElement("div");info.style.cssText="min-width:0;display:grid;gap:3px";const name=document.createElement("strong");name.textContent=st.name||"Local radio station";name.style.cssText="font-size:13px;overflow-wrap:anywhere";const detail=document.createElement("span");detail.textContent=[st.state,st.country,st.tags].filter(Boolean).join(" · ")||"Public radio directory";detail.style.cssText="font-size:11px;color:var(--muted);overflow-wrap:anywhere";const play=document.createElement("button");play.type="button";play.textContent="▶ Play";play.style.cssText="flex-shrink:0;padding:8px 11px;border:0;border-radius:8px;background:var(--accent);color:#111;font-weight:800;cursor:pointer";play.addEventListener("click",()=>{radioGenre.value="custom";radioUrl.value=st.url_resolved;document.getElementById("radioTrack").textContent=st.name||"Nearby radio";document.getElementById("radioArtist").textContent=[st.state,st.country].filter(Boolean).join(" · ")||"Nearby station";document.getElementById("connectRadio").click();});info.append(name,detail);card.append(info,play);nearbyList.append(card);});
+   nearbyStatus.textContent=`Found ${playable.length} nearby station${playable.length===1?"":"s"}. Select Play to listen.`;
+  }catch(e){nearbyStatus.textContent="Could not load nearby stations. Try again or use the genre selector.";}finally{nearbyButton.disabled=false;}
+ },err=>{nearbyButton.disabled=false;nearbyStatus.textContent=err.code===1?"Location permission denied. You can still use the genre selector or a stream URL.":"Could not get location. Please try again.";},{enableHighAccuracy:false,timeout:12000,maximumAge:300000});
+});
+radioGenre.addEventListener("change",()=>{const station=radioStations[radioGenre.value];if(station){radioUrl.value=station.url;document.getElementById("radioTrack").textContent=station.name;document.getElementById("radioArtist").textContent=station.station+" · External online station";radioMessage("Genre selected — press Play Radio");}else{radioUrl.value="";radioUrl.focus();radioMessage("Paste a direct stream URL");}});
+function radioMessage(message){radioStatus.textContent=message;}
+radioAudio.autoplay=false;
+radioAudio.pause();
+radioAudio.volume=Number(radioVolume.value)/100;
+radioVolume.addEventListener("input",()=>{radioAudio.volume=Number(radioVolume.value)/100;});
+document.getElementById("connectRadio").addEventListener("click",async()=>{
+ const url=radioUrl.value.trim();
+ if(!url){radioMessage("Paste a direct radio stream URL first");radioUrl.focus();return;}
+ try{new URL(url); }catch{radioMessage("Please enter a valid URL");return;}
+ radioAudio.src=url;radioAudio.load();
+ try{await radioAudio.play();radioMessage("Live radio playing");const picked=radioStations[radioGenre.value];document.getElementById("radioTrack").textContent=picked?picked.name:"Live URTRIBE Radio";document.getElementById("radioArtist").textContent=picked?picked.station+" · Online station":"Connected to your audio stream";radioPlay.textContent="Ⅱ";}
+ catch(err){radioMessage("Stream could not start. Check the URL and try again.");}
+});
+document.getElementById("radioStop").addEventListener("click",()=>{radioAudio.pause();radioAudio.removeAttribute("src");radioAudio.load();radioPlay.textContent="▶";radioMessage("Radio off · Press Play to listen");});
+radioPlay.addEventListener("click",async()=>{
+ if(!radioAudio.src){const url=radioUrl.value.trim();if(url){document.getElementById("connectRadio").click();return;}radioMessage("Choose a genre or add a stream URL first");radioUrl.focus();return;}
+ if(radioAudio.paused){try{await radioAudio.play();}catch(e){radioMessage("Playback failed. Check the audio source.");}}else radioAudio.pause();
+});
+radioAudio.addEventListener("playing",()=>{radioPlay.textContent="Ⅱ";radioMessage("Live radio playing");});
+radioAudio.addEventListener("pause",()=>{radioPlay.textContent="▶";if(radioAudio.src)radioMessage("Radio paused");});
+radioAudio.addEventListener("waiting",()=>radioMessage("Buffering stream…"));
+radioAudio.addEventListener("error",()=>radioMessage("Audio unavailable. Verify the direct stream URL."));
+radioAudio.addEventListener("timeupdate",()=>{if(Number.isFinite(radioAudio.duration)){document.getElementById("radioElapsed").textContent=new Date(radioAudio.currentTime*1000).toISOString().slice(14,19);document.getElementById("radioProgress").style.width=(radioAudio.currentTime/radioAudio.duration*100)+"%";}else{document.getElementById("radioElapsed").textContent="LIVE";document.getElementById("radioProgress").style.width="100%";}});
+document.getElementById("radioFile").addEventListener("change",e=>{const file=e.target.files&&e.target.files[0];if(!file)return;radioAudio.pause();radioAudio.src=URL.createObjectURL(file);radioAudio.load();document.getElementById("radioTrack").textContent=file.name;document.getElementById("radioArtist").textContent="Local audio file · Ready to play";radioMessage("Audio ready · Press Play to listen");radioPlay.textContent="▶";});
+document.getElementById("prevTrack").addEventListener("click",()=>{if(radioAudio.src)radioAudio.currentTime=0;else radioMessage("Connect a radio stream first");});
+// Creator music library: persist audio files in IndexedDB on this device. Shared cloud storage requires a backend.
+const creatorTracks=[];
+const creatorPlaylist=document.getElementById("creatorPlaylist");
+const creatorDbName="urtribe_creator_music_v1";
+function openCreatorDb(){return new Promise((resolve,reject)=>{const req=indexedDB.open(creatorDbName,1);req.onupgradeneeded=()=>{if(!req.result.objectStoreNames.contains("tracks"))req.result.createObjectStore("tracks",{keyPath:"id"});};req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error);});}
+async function saveCreatorFile(record){const db=await openCreatorDb();return new Promise((resolve,reject)=>{const tx=db.transaction("tracks","readwrite");tx.objectStore("tracks").put(record);tx.oncomplete=()=>{db.close();resolve();};tx.onerror=()=>{db.close();reject(tx.error);};});}
+async function deleteCreatorFile(id){const db=await openCreatorDb();return new Promise((resolve,reject)=>{const tx=db.transaction("tracks","readwrite");tx.objectStore("tracks").delete(id);tx.oncomplete=()=>{db.close();resolve();};tx.onerror=()=>{db.close();reject(tx.error);};});}
+async function loadCreatorFiles(){try{const db=await openCreatorDb();const records=await new Promise((resolve,reject)=>{const req=db.transaction("tracks","readonly").objectStore("tracks").getAll();req.onsuccess=()=>resolve(req.result||[]);req.onerror=()=>reject(req.error);});db.close();records.forEach(r=>creatorTracks.push({...r,url:URL.createObjectURL(r.file)}));renderCreatorPlaylist();renderListenerPlaylists();}catch(err){creatorPlaylist.textContent="Browser storage is unavailable. Try a modern browser with site storage enabled.";}}
+function escapeCreatorText(value){return String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function renderCreatorOptions(){
+ const select=document.getElementById("creatorPlaylistSelect");if(!select)return;const previous=select.value;const artists=[...new Set(creatorTracks.map(t=>(t.artist||"").trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b));select.innerHTML='<option value="">Choose a DJ or artist</option>'+artists.map(a=>`<option value="${escapeCreatorText(a)}">${escapeCreatorText(a)}</option>`).join("");if(artists.includes(previous))select.value=previous;
+}
+function renderCreatorPlaylist(){
+ renderCreatorOptions();
+ if(!creatorTracks.length){creatorPlaylist.textContent="Your saved music will appear here.";return;}
+ const term=(document.getElementById("creatorTrackSearch")?.value||"").trim().toLowerCase();
+ const matches=creatorTracks.map((t,i)=>({...t,index:i})).filter(t=>(t.title+" "+t.artist).toLowerCase().includes(term));
+ if(!matches.length){creatorPlaylist.textContent="No tracks match your search yet.";return;}
+ creatorPlaylist.innerHTML=matches.map(t=>`<div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 0;border-top:1px solid var(--line)"><span style="min-width:0"><strong style="color:var(--text)">${escapeCreatorText(t.title)}</strong><br>${escapeCreatorText(t.artist)}</span><span style="display:flex;gap:6px;flex-shrink:0"><button type="button" data-play-creator="${t.index}" style="border:1px solid var(--line);border-radius:8px;padding:7px 10px;background:#202027;color:var(--text);cursor:pointer">▶ Play</button><button type="button" data-add-playlist="${t.id}" style="border:1px solid var(--line);border-radius:8px;padding:7px 10px;background:#202027;color:var(--text);cursor:pointer">＋ Playlist</button><button type="button" data-delete-creator="${t.id}" aria-label="Delete ${escapeCreatorText(t.title)}" style="border:1px solid var(--line);border-radius:8px;padding:7px 10px;background:#202027;color:var(--text);cursor:pointer">Delete</button></span></div>`).join("");
+ creatorPlaylist.querySelectorAll("[data-play-creator]").forEach(b=>b.addEventListener("click",()=>playCreatorTrack(Number(b.dataset.playCreator))));
+ creatorPlaylist.querySelectorAll("[data-add-playlist]").forEach(b=>b.addEventListener("click",()=>addTrackToListenerPlaylist(b.dataset.addPlaylist)));
+ creatorPlaylist.querySelectorAll("[data-delete-creator]").forEach(b=>b.addEventListener("click",async()=>{const id=b.dataset.deleteCreator;try{await deleteCreatorFile(id);const i=creatorTracks.findIndex(t=>t.id===id);if(i>=0){URL.revokeObjectURL(creatorTracks[i].url);creatorTracks.splice(i,1);}renderCreatorPlaylist();radioMessage("Music removed from this device");}catch(e){radioMessage("Could not delete saved music");}}));
+}
+document.getElementById("creatorTrackSearch").addEventListener("input",renderCreatorPlaylist);
+// Listener playlists are saved locally; IndexedDB keeps selected audio files available offline.
+const playlistStoreKey="urt_listener_playlists_v1";
+let listenerPlaylists=[];
+try{listenerPlaylists=JSON.parse(localStorage.getItem(playlistStoreKey)||"[]");if(!Array.isArray(listenerPlaylists))listenerPlaylists=[];}catch(e){listenerPlaylists=[];}
+const playlistSelect=document.getElementById("listenerPlaylistSelect"),playlistList=document.getElementById("listenerPlaylistList");
+function saveListenerPlaylists(){try{localStorage.setItem(playlistStoreKey,JSON.stringify(listenerPlaylists));}catch(e){showToast("Could not save playlist details in this browser");}}
+function renderListenerPlaylists(){
+ const previous=playlistSelect.value;playlistSelect.innerHTML=listenerPlaylists.length?listenerPlaylists.map(p=>`<option value="${escapeCreatorText(p.id)}">${escapeCreatorText(p.name)}</option>`).join(""):'<option value="">Create a playlist first</option>';
+ if(listenerPlaylists.some(p=>p.id===previous))playlistSelect.value=previous;
+ if(!listenerPlaylists.length){playlistList.textContent="No playlists yet. Create one above.";return;}
+ playlistList.innerHTML=listenerPlaylists.map(p=>{const tracks=(p.trackIds||[]).map(id=>creatorTracks.find(t=>t.id===id)).filter(Boolean);return `<div style="padding:10px 0;border-top:1px solid var(--line)"><div style="display:flex;align-items:center;justify-content:space-between;gap:8px"><strong style="color:var(--text)">${escapeCreatorText(p.name)}</strong><span style="display:flex;gap:6px"><button type="button" data-playlist-play="${escapeCreatorText(p.id)}" ${tracks.length?"":"disabled"} style="padding:6px 9px;border:0;border-radius:7px;background:var(--accent);color:#111;font-weight:800;cursor:pointer">▶ Play</button><button type="button" data-playlist-delete="${escapeCreatorText(p.id)}" style="padding:6px 9px;border:1px solid var(--line);border-radius:7px;background:#202027;color:var(--text);cursor:pointer">Delete</button></span></div><div style="margin-top:5px;color:var(--muted)">${tracks.length?tracks.map(t=>escapeCreatorText(t.title)+" — "+escapeCreatorText(t.artist)).join("<br>"):"No saved tracks yet. Add music above."}</div></div>`;}).join("");
+ playlistList.querySelectorAll("[data-playlist-delete]").forEach(b=>b.addEventListener("click",()=>{listenerPlaylists=listenerPlaylists.filter(p=>p.id!==b.dataset.playlistDelete);saveListenerPlaylists();renderListenerPlaylists();}));
+ playlistList.querySelectorAll("[data-playlist-play]").forEach(b=>b.addEventListener("click",async()=>{const p=listenerPlaylists.find(x=>x.id===b.dataset.playlistPlay),t=p&&(p.trackIds||[]).map(id=>creatorTracks.find(x=>x.id===id)).find(Boolean);if(!t){showToast("Add saved music to this playlist first");return;}const i=creatorTracks.findIndex(x=>x.id===t.id);playCreatorTrack(i);try{await radioAudio.play();radioPlay.textContent="Ⅱ";radioMessage("Playlist playing · Saved on this device");}catch(e){radioMessage("Track ready · Press Play to listen");}}));
+}
+document.getElementById("listenerPlaylistForm").addEventListener("submit",e=>{e.preventDefault();const name=document.getElementById("listenerPlaylistName").value.trim();if(!name)return;listenerPlaylists.push({id:(crypto.randomUUID?crypto.randomUUID():String(Date.now())),name,trackIds:[]});saveListenerPlaylists();renderListenerPlaylists();playlistSelect.value=listenerPlaylists[listenerPlaylists.length-1].id;e.target.reset();showToast("Playlist created");});
+function addTrackToListenerPlaylist(id){const p=listenerPlaylists.find(x=>x.id===playlistSelect.value);if(!p){showToast("Create or choose a playlist first");return;}if(!p.trackIds.includes(id))p.trackIds.push(id);saveListenerPlaylists();renderListenerPlaylists();showToast("Track added to playlist");}
+document.getElementById("createCreatorPlaylist").addEventListener("click",()=>{const artist=document.getElementById("creatorPlaylistSelect").value;if(!artist){showToast("Choose a DJ or artist first");return;}const tracks=creatorTracks.filter(t=>(t.artist||"").trim()===artist);if(!tracks.length){showToast("No saved tracks found for this creator on this device");return;}const id=(crypto.randomUUID?crypto.randomUUID():String(Date.now()));listenerPlaylists.push({id,name:artist+" Playlist",trackIds:tracks.map(t=>t.id)});saveListenerPlaylists();renderListenerPlaylists();playlistSelect.value=id;showToast("Playlist created from "+artist+"'s saved music");});
+function playCreatorTrack(i){const t=creatorTracks[i];if(!t)return;radioAudio.pause();radioAudio.src=t.url;radioAudio.load();document.getElementById("radioTrack").textContent=t.title;document.getElementById("radioArtist").textContent=t.artist+" · URTRIBE creator library";radioMessage("Track ready · Press Play to listen");radioPlay.textContent="▶";}
+document.getElementById("creatorTrackForm").addEventListener("submit",async e=>{e.preventDefault();const title=document.getElementById("creatorTrackTitle").value.trim(),artist=document.getElementById("creatorTrackArtist").value.trim(),file=document.getElementById("creatorTrackFile").files[0];if(!title||!artist||!file)return;if(!file.type.startsWith("audio/")){radioMessage("Please choose a supported audio file");return;}const record={id:(crypto.randomUUID?crypto.randomUUID():String(Date.now())+Math.random()),title,artist,file,createdAt:Date.now()};try{await saveCreatorFile(record);creatorTracks.push({...record,url:URL.createObjectURL(file)});renderCreatorPlaylist();e.target.reset();radioMessage("Music saved on this device · Press Play when ready");showToast("Music saved to your device library");}catch(err){radioMessage("Could not save music. Check available browser storage.");}});
+loadCreatorFiles();
+if(navigator.storage&&navigator.storage.persist){navigator.storage.persist().catch(()=>{});}
+
+const products=[{id:"tee",name:"URTRIBE Classic Tee",desc:"Soft everyday community fit",price:24,color:"#e9e9e9",print:"#111117",style:"tee",label:"BESTSELLER"},{id:"hoodie",name:"Tribe Pullover Hoodie",desc:"A cozy layer for your crew",price:48,color:"#e65f00",print:"#111117",style:"hoodie",label:"CREATOR PICK"},{id:"cap",name:"URTRIBE Signature Cap",desc:"Top off your everyday look",price:22,color:"#25252e",print:"#e65f00",style:"cap",label:"NEW"},{id:"tote",name:"Community Tote",desc:"Carry your essentials together",price:18,color:"#d6b99b",print:"#111117",style:"tote",label:"ECO STYLE"}];
+let cart=[];const shopGrid=document.getElementById("shopGrid");
+shopGrid.innerHTML=products.map(p=>`<article class="product-card"><div class="product-art ${p.style}" style="--shirt:${p.color};--print:${p.print}"><span class="product-label">${p.label}</span><div class="merch-shirt"></div></div><div class="product-info"><h3>${p.name}</h3><p>${p.desc}</p><div class="product-bottom"><span class="product-price">$${p.price.toFixed(2)}</span><button class="add-cart" data-product="${p.id}">＋ Add to cart</button></div></div></article>`).join("");
+shopGrid.querySelectorAll(".add-cart").forEach(b=>b.addEventListener("click",()=>{const p=products.find(x=>x.id===b.dataset.product),item=cart.find(x=>x.id===p.id);if(item)item.qty++;else cart.push({...p,qty:1});renderCart();showToast(`${p.name} added to cart`);}));
+function renderCart(){const qty=cart.reduce((n,p)=>n+p.qty,0),total=cart.reduce((n,p)=>n+p.price*p.qty,0);document.getElementById("cartCount").textContent=qty;document.getElementById("cartTotal").textContent=`$${total.toFixed(2)}`;const el=document.getElementById("cartItems");el.innerHTML=cart.length?cart.map(p=>`<div class="cart-line"><div><strong>${p.name}</strong><small>Qty ${p.qty} · $${p.price.toFixed(2)} each</small></div><div><strong>$${(p.price*p.qty).toFixed(2)}</strong><br><button data-remove="${p.id}">Remove</button></div></div>`).join(""):'<p class="muted">Your cart is empty.</p>';el.querySelectorAll("[data-remove]").forEach(b=>b.addEventListener("click",()=>{cart=cart.filter(p=>p.id!==b.dataset.remove);renderCart();}));}
+document.getElementById("cartButton").addEventListener("click",()=>document.getElementById("cartModal").classList.remove("hidden"));document.getElementById("checkoutBtn").addEventListener("click",()=>showToast(cart.length?"Connect a secure payment backend to enable checkout.":"Your cart is empty."));
+
+  
+// Front-end login preview only; connect a trusted authentication provider before public launch.
+(()=>{
+ const screen=document.getElementById('authScreen'),form=document.getElementById('authForm'),heading=document.getElementById('authHeading'),sub=document.getElementById('authSub'),nameWrap=document.getElementById('authNameWrap'),password=document.getElementById('authPassword'),submit=document.getElementById('authSubmit'),toggle=document.getElementById('authToggle'),message=document.getElementById('authMessage');
+ let creating=false;
+ function mode(create){creating=create;heading.textContent=create?'Join the tribe':'Welcome to your tribe';sub.textContent=create?'Create your URTRIBE profile to explore creators, music, and live sessions.':'Sign in to discover live creators, music, radio, and your community.';nameWrap.hidden=!create;document.getElementById('authName').required=create;password.autocomplete=create?'new-password':'current-password';submit.textContent=create?'Create Account':'Sign In';toggle.textContent=create?'Sign in':'Create account';message.textContent='';}
+ toggle.addEventListener('click',()=>mode(!creating));
+ document.getElementById('authForgot').addEventListener('click',()=>{message.textContent='Password recovery will be available when secure account services are connected.';});
+ document.getElementById('authVisitor').addEventListener('click',()=>{screen.classList.add('hidden');});
+ form.addEventListener('submit',e=>{e.preventDefault();const email=document.getElementById('authEmail').value.trim(),pw=password.value,name=document.getElementById('authName').value.trim();if(!email||pw.length<6||(creating&&!name)){message.textContent='Enter the required details. Password must be at least 6 characters.';return;}message.textContent='';screen.classList.add('hidden');const avatar=document.querySelector('.avatar');if(avatar)avatar.textContent=(creating?name:email.split('@')[0]).slice(0,2).toUpperCase();if(typeof showToast==='function')showToast('This page is not connected to secure account services yet.');});
+})();
+
+  </script>
+
+<div id="urtInstallBar" role="region" aria-label="Install URTRIBE STREAM">
+  <span>Install URTRIBE STREAM on this device</span>
+  <button id="urtInstallBtn" type="button">Install</button>
+  <button class="urtDismiss" id="urtInstallDismiss" type="button" aria-label="Dismiss">×</button>
+</div>
+<script>
+(function(){
+  if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+    window.addEventListener('load', function(){ navigator.serviceWorker.register('/sw.js').catch(function(err){ console.warn('PWA offline support unavailable:',err); }); });
+  }
+  var deferredPrompt=null,bar=document.getElementById('urtInstallBar'),install=document.getElementById('urtInstallBtn'),dismiss=document.getElementById('urtInstallDismiss');
+  window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();deferredPrompt=e;bar.style.display='flex';});
+  install.addEventListener('click',async function(){if(!deferredPrompt)return;deferredPrompt.prompt();await deferredPrompt.userChoice;deferredPrompt=null;bar.style.display='none';});
+  dismiss.addEventListener('click',function(){bar.style.display='none';});
+  window.addEventListener('appinstalled',function(){bar.style.display='none';});
+})();
+</script>
+
+
+<style>
+.privacy-dialog{max-width:540px}.privacy-dialog .privacy-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.privacy-dialog .privacy-actions button{flex:1;min-width:130px}.privacy-dialog .privacy-check{display:flex!important;align-items:center;gap:10px;margin:14px 0!important;font-size:14px!important}.privacy-dialog .privacy-check input{width:auto!important;margin:0!important;accent-color:#f07819}.privacy-note{font-size:12px;color:var(--muted);line-height:1.5}
+</style>
+
+<div class="modal hidden" id="resourceInfo" role="dialog" aria-modal="true" aria-labelledby="resourceInfoTitle">
+ <div class="modal-card privacy-dialog"><button class="close" data-resource-close aria-label="Close">×</button><span class="eyebrow">URTRIBE STREAM</span><h2 id="resourceInfoTitle">Resources</h2><div id="resourceInfoBody" class="muted" aria-live="polite"></div><div class="privacy-actions"><button class="primary" type="button" data-resource-close>Close</button></div></div>
+</div>
+<script>
+(function(){
+ const modal=document.getElementById('resourceInfo'), title=document.getElementById('resourceInfoTitle'), body=document.getElementById('resourceInfoBody');
+ if(!modal||!title||!body)return;
+ const content={
+  terms:['Terms of Use','Use URTRIBE STREAM respectfully and only share content you own or are authorized to distribute. Do not use the platform to violate others’ rights or applicable laws. Full platform terms are being prepared; this notice is not a substitute for a complete legal agreement.'],
+  privacy:['Privacy at URTRIBE STREAM','This website preview may store preferences and locally saved activity in your browser. Cookie choices and privacy opt-out selections currently remain on this device and are not submitted to a URTRIBE server. A complete privacy notice describing any future data collection and retention will be published before those services are enabled.'],
+  security:['Security','Keep your account credentials private and use a unique password. This front-end preview does not provide production-grade account security or server-side account management. Report a security concern using the Contact URTRIBE link in the footer.'],
+  status:['Platform Status','URTRIBE STREAM is a developing creator and community platform. Some features shown in this preview are browser-only or demonstration experiences; secure accounts, shared live streaming, payments, and creator payouts require backend integrations.'],
+  community:['Community','URTRIBE STREAM is a space for DJs, artists, creators, and viewers to discover content and connect. Share only content you have permission to publish and treat other community members respectfully.'] ,
+  docs:['Help & Guides','Use the main navigation to explore creators, radio, movies and videos, and the merch shop. Some experiences are previews and may require additional services before they work across devices. For help, contact URTRIBE STREAM by email.']
+ };
+ document.querySelectorAll('[data-resource]').forEach(link=>link.addEventListener('click',e=>{e.preventDefault();const item=content[link.dataset.resource];if(!item)return;title.textContent=item[0];body.textContent=item[1];modal.classList.remove('hidden')}));
+ document.querySelectorAll('[data-resource-close]').forEach(btn=>btn.addEventListener('click',()=>modal.classList.add('hidden')));
+ modal.addEventListener('click',e=>{if(e.target===modal)modal.classList.add('hidden')});
+ document.addEventListener('keydown',e=>{if(e.key==='Escape')modal.classList.add('hidden')});
+})();
+</script>
+
+<div class="modal hidden" id="cookieSettings" role="dialog" aria-modal="true" aria-labelledby="cookieSettingsTitle">
+ <div class="modal-card privacy-dialog"><button class="close" data-privacy-close aria-label="Close">×</button><span class="eyebrow">YOUR PRIVACY</span><h2 id="cookieSettingsTitle">Cookie &amp; privacy settings</h2><p class="muted">Choose which optional preferences you want to allow on this device.</p>
+ <label class="privacy-check"><input type="checkbox" checked disabled> Essential storage <small>(required for basic site features)</small></label>
+ <label class="privacy-check"><input type="checkbox" id="analyticsConsent"> Analytics storage</label>
+ <label class="privacy-check"><input type="checkbox" id="personalizationConsent"> Personalization storage</label>
+ <p class="privacy-note">Your choices are saved in this browser only. This preview does not use these settings to control third-party trackers, and does not send your choices to URTRIBE.</p>
+ <div class="privacy-actions"><button class="secondary" id="rejectOptional" type="button">Reject optional</button><button class="primary" id="savePrivacy" type="button">Save preferences</button></div>
+ </div>
+</div>
+<div class="modal hidden" id="privacyOptOut" role="dialog" aria-modal="true" aria-labelledby="privacyOptOutTitle">
+ <div class="modal-card privacy-dialog"><button class="close" data-privacy-close aria-label="Close">×</button><span class="eyebrow">PRIVACY CHOICE</span><h2 id="privacyOptOutTitle">Do not share my personal information</h2><p class="muted">You can record this preference on this device. This standalone preview does not transmit the request to URTRIBE or any service provider.</p>
+ <label class="privacy-check"><input type="checkbox" id="optOutCheck"> I request that my personal information not be shared.</label>
+ <p class="privacy-note" id="optOutStatus" aria-live="polite"></p><div class="privacy-actions"><button class="primary" id="saveOptOut" type="button">Save my choice</button></div>
+ </div>
+</div>
+<script>
+(function(){
+ const cookieModal=document.getElementById('cookieSettings'), optModal=document.getElementById('privacyOptOut');
+ if(!cookieModal||!optModal)return;
+ const read=(k,d)=>{try{const v=localStorage.getItem(k);return v===null?d:v==='true'}catch(e){return d}};
+ const write=(k,v)=>{try{localStorage.setItem(k,String(v));return true}catch(e){return false}};
+ const analytics=document.getElementById('analyticsConsent'),personal=document.getElementById('personalizationConsent'),opt=document.getElementById('optOutCheck'),status=document.getElementById('optOutStatus');
+ function openCookie(e){if(e)e.preventDefault();analytics.checked=read('urtribe_analytics_consent',false);personal.checked=read('urtribe_personalization_consent',false);cookieModal.classList.remove('hidden')}
+ function openOpt(e){if(e)e.preventDefault();opt.checked=read('urtribe_do_not_share',false);status.textContent=opt.checked?'Your preference is saved on this device.':'';optModal.classList.remove('hidden')}
+ document.getElementById('manageCookiesLink')?.addEventListener('click',openCookie);document.getElementById('privacyOptOutLink')?.addEventListener('click',openOpt);
+ function close(){cookieModal.classList.add('hidden');optModal.classList.add('hidden')}
+ document.querySelectorAll('[data-privacy-close]').forEach(b=>b.addEventListener('click',close));[cookieModal,optModal].forEach(m=>m.addEventListener('click',e=>{if(e.target===m)close()}));
+ function savePrefs(a,p){const ok1=write('urtribe_analytics_consent',a),ok2=write('urtribe_personalization_consent',p);if(ok1&&ok2){close();if(typeof showToast==='function')showToast('Privacy preferences saved on this device.')}else if(typeof showToast==='function')showToast('Could not save preferences in this browser.')}
+ document.getElementById('savePrivacy').addEventListener('click',()=>savePrefs(analytics.checked,personal.checked));document.getElementById('rejectOptional').addEventListener('click',()=>savePrefs(false,false));
+ document.getElementById('saveOptOut').addEventListener('click',()=>{if(write('urtribe_do_not_share',opt.checked)){status.textContent=opt.checked?'Your opt-out preference is saved on this device.':'Your opt-out preference was removed on this device.';if(typeof showToast==='function')showToast('Privacy choice saved on this device.')}else status.textContent='Unable to save this choice in the browser.'});
+})();
+
+  // Social sharing links use the current deployed page URL.
+  document.querySelectorAll('[data-share]').forEach(link=>{
+    const page=encodeURIComponent(window.location.href);
+    const title=encodeURIComponent('Check out URTRIBE STREAM');
+    const kind=link.dataset.share;
+    if(kind==='facebook')link.href='https://www.facebook.com/sharer/sharer.php?u='+page;
+    if(kind==='x')link.href='https://twitter.com/intent/tweet?url='+page+'&text='+title;
+    if(kind==='whatsapp')link.href='https://wa.me/?text='+title+'%20'+page;
+    if(kind==='email')link.href='mailto:?subject='+title+'&body='+page;
+  });
+  document.getElementById('copySiteLink')?.addEventListener('click',async()=>{
+    try{await navigator.clipboard.writeText(window.location.href);showToast('Website link copied');}
+    catch(e){showToast('Copy unavailable. Copy the website address from your browser.');}
+  });
+</script>
+
+
+<script>
+(function(){
+  const dateEl=document.getElementById('localDate'),timeEl=document.getElementById('localTime');
+  if(!dateEl||!timeEl)return;
+  const dateFmt=new Intl.DateTimeFormat(undefined,{weekday:'long',month:'short',day:'numeric',year:'numeric'});
+  const timeFmt=new Intl.DateTimeFormat(undefined,{hour:'numeric',minute:'2-digit'});
+  function updateClock(){const now=new Date();dateEl.textContent=dateFmt.format(now);timeEl.textContent=timeFmt.format(now)}
+  updateClock();setInterval(updateClock,30000);
+  const reading=document.getElementById('weatherReading'),details=document.getElementById('weatherDetails'),symbol=document.getElementById('weatherSymbol');
+  const labels={0:['Clear sky','☀'],1:['Mainly clear','🌤'],2:['Partly cloudy','⛅'],3:['Overcast','☁'],45:['Fog','🌫'],48:['Rime fog','🌫'],51:['Light drizzle','🌦'],53:['Drizzle','🌦'],55:['Heavy drizzle','🌧'],56:['Freezing drizzle','🌧'],57:['Freezing drizzle','🌧'],61:['Light rain','🌦'],63:['Rain','🌧'],65:['Heavy rain','🌧'],66:['Freezing rain','🌧'],67:['Freezing rain','🌧'],71:['Light snow','🌨'],73:['Snow','❄'],75:['Heavy snow','❄'],77:['Snow grains','🌨'],80:['Rain showers','🌦'],81:['Rain showers','🌧'],82:['Heavy showers','🌧'],85:['Snow showers','🌨'],86:['Heavy snow showers','❄'],95:['Thunderstorm','⛈'],96:['Thunderstorm, hail','⛈'],99:['Thunderstorm, hail','⛈']};
+  async function loadWeather(){
+    try{
+      const url='https://api.open-meteo.com/v1/forecast?latitude=41.5868&longitude=-93.6250&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m&temperature_unit=fahrenheit&wind_speed_unit=mph&timezone=America%2FChicago';
+      const response=await fetch(url,{headers:{Accept:'application/json'}});if(!response.ok)throw new Error('Weather unavailable');
+      const data=await response.json(),c=data.current;if(!c)throw new Error('No current weather');
+      const info=labels[c.weather_code]||['Current conditions','🌡'];symbol.textContent=info[1];reading.textContent=Math.round(c.temperature_2m)+'°F · '+info[0];
+      details.textContent='Feels '+Math.round(c.apparent_temperature)+'° · Wind '+Math.round(c.wind_speed_10m)+' mph · Des Moines, IA';
+    }catch(e){reading.textContent='Weather unavailable';details.textContent='Check the local forecast · Des Moines, IA';symbol.textContent='☁'}
+  }
+  loadWeather();
+})();
+</script>
+
+
+<script>
+// Local upload preview for long videos and short clips. Cloud publishing needs a backend.
+(()=>{
+ const form=document.getElementById('videoUploadForm');if(!form)return;
+ const status=document.getElementById('videoUploadStatus'),library=document.getElementById('creatorVideoLibrary'),fileInput=document.getElementById('uploadVideoFile');
+ const dbName='urt_video_library_local_v1';let entries=[];
+ const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ function dbOpen(){return new Promise((resolve,reject)=>{const q=indexedDB.open(dbName,1);q.onupgradeneeded=()=>q.result.createObjectStore('videos',{keyPath:'id'});q.onsuccess=()=>resolve(q.result);q.onerror=()=>reject(q.error);});}
+ async function all(){const db=await dbOpen();return new Promise((resolve,reject)=>{const q=db.transaction('videos','readonly').objectStore('videos').getAll();q.onsuccess=()=>{db.close();resolve(q.result||[])};q.onerror=()=>{db.close();reject(q.error)}})}
+ async function put(item){const db=await dbOpen();return new Promise((resolve,reject)=>{const tx=db.transaction('videos','readwrite');tx.objectStore('videos').put(item);tx.oncomplete=()=>{db.close();resolve()};tx.onerror=()=>{db.close();reject(tx.error)}})}
+ async function remove(id){const db=await dbOpen();return new Promise((resolve,reject)=>{const tx=db.transaction('videos','readwrite');tx.objectStore('videos').delete(id);tx.oncomplete=()=>{db.close();resolve()};tx.onerror=()=>{db.close();reject(tx.error)}})}
+ function render(){library.innerHTML='';if(!entries.length){library.innerHTML='<p class="muted">No locally saved videos yet.</p>';return;}entries.slice().sort((a,b)=>b.createdAt-a.createdAt).forEach(item=>{const card=document.createElement('article');card.className='movie-card';const video=document.createElement('video');video.controls=true;video.playsInline=true;video.preload='metadata';video.style.cssText='width:100%;aspect-ratio:16/9;object-fit:contain;background:#050505';video.src=URL.createObjectURL(item.file);const info=document.createElement('div');info.className='movie-info';info.innerHTML=`<b class="movie-tag">${item.kind==='short'?'SHORT':'VIDEO'}</b><h3>${esc(item.title)}</h3><p>By ${esc(item.creator)} · Saved on this device</p><button type="button" class="secondary" style="margin-top:8px" data-remove="${esc(item.id)}">Remove</button>`;card.append(video,info);library.append(card);});library.querySelectorAll('[data-remove]').forEach(b=>b.addEventListener('click',async()=>{try{await remove(b.dataset.remove);entries=entries.filter(x=>x.id!==b.dataset.remove);render();status.textContent='Video removed from this browser.';}catch(e){status.textContent='Could not remove this video.'}}));}
+ form.addEventListener('submit',async e=>{e.preventDefault();const title=document.getElementById('uploadVideoTitle').value.trim(),creator=document.getElementById('uploadVideoCreator').value.trim(),kind=document.getElementById('uploadVideoType').value,file=fileInput.files[0];if(!file)return;if(!file.type.startsWith('video/')){status.textContent='Choose a supported video file.';return;}if(file.size>100*1024*1024){status.textContent='This preview supports files up to 100 MB.';return;}const btn=document.getElementById('publishVideoBtn');btn.disabled=true;status.textContent='Checking video…';try{if(kind==='short'){const url=URL.createObjectURL(file);const duration=await new Promise((resolve,reject)=>{const v=document.createElement('video');v.preload='metadata';v.onloadedmetadata=()=>{URL.revokeObjectURL(url);resolve(v.duration)};v.onerror=()=>{URL.revokeObjectURL(url);reject(new Error('Could not read video duration.'))};v.src=url;});if(!Number.isFinite(duration)||duration>60){throw new Error('Shorts must be 60 seconds or less.');}}const item={id:crypto.randomUUID?crypto.randomUUID():String(Date.now()),title,creator,kind,file,createdAt:Date.now()};await put(item);entries.push(item);render();form.reset();status.textContent='Saved to this browser. It is not uploaded to a public server.';}catch(err){status.textContent=err.message||'Browser storage is unavailable or full.';}finally{btn.disabled=false;}});
+ all().then(items=>{entries=items;render()}).catch(()=>{status.textContent='Local video storage is unavailable in this browser.'});
+})();
+</script>
+
+
+<script>
+// Local-only music equipment marketplace preview; server and payment integration are not connected.
+(()=>{
+ const form=document.getElementById('marketListingForm'),wrap=document.getElementById('marketListings'),status=document.getElementById('marketStatus');if(!form||!wrap)return;
+ const key='urtribe_gear_market_v1';let items=[];
+ const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ const symbols={'DJ Controllers':'🎛️','Mixers':'🎚️','Turntables':'💿','Speakers & Monitors':'🔊','Headphones':'🎧','Microphones':'🎤','Audio Interfaces':'🎛️','Instruments':'🎹','Studio Equipment':'🎙️','Lighting & Visuals':'💡','Cables & Accessories':'🔌','Other':'🎵'};
+ function save(){try{localStorage.setItem(key,JSON.stringify(items));return true}catch(e){return false}}
+ function render(){if(!items.length){wrap.innerHTML='<p class="muted">No equipment listings yet. Be the first to list an item.</p>';return}wrap.innerHTML=items.slice().sort((a,b)=>b.created-a.created).map(x=>`<article class="market-item"><div class="market-icon" aria-hidden="true">${symbols[x.category]||'🎵'}</div><h3>${esc(x.title)}</h3><p>${esc(x.category)} · ${esc(x.condition)}</p><p>${esc(x.description||'No description provided.')}</p><p>Seller: ${esc(x.seller)}${x.location?' · '+esc(x.location):''}</p><div class="market-price">${Number(x.price).toFixed(2)}</div><div class="market-actions"><a href="mailto:${encodeURIComponent(x.email)}?subject=${encodeURIComponent('URTRIBE Marketplace: '+x.title)}">Contact seller</a><button type="button" data-market-remove="${esc(x.id)}">Remove listing</button></div></article>`).join('');wrap.querySelectorAll('[data-market-remove]').forEach(b=>b.addEventListener('click',()=>{items=items.filter(x=>x.id!==b.dataset.marketRemove);save();render();status.textContent='Listing removed from this browser.'}))}
+ try{const parsed=JSON.parse(localStorage.getItem(key)||'[]');if(Array.isArray(parsed))items=parsed.filter(x=>x&&typeof x.title==='string'&&typeof x.email==='string')}catch(e){}
+ form.addEventListener('submit',e=>{e.preventDefault();const price=Number(document.getElementById('marketPrice').value);if(!Number.isFinite(price)||price<=0){status.textContent='Enter a valid price greater than zero.';return}const x={id:Date.now().toString(36)+Math.random().toString(36).slice(2,8),title:document.getElementById('marketTitle').value.trim(),category:document.getElementById('marketCategory').value,condition:document.getElementById('marketCondition').value,price,seller:document.getElementById('marketSeller').value.trim(),email:document.getElementById('marketEmail').value.trim(),location:document.getElementById('marketLocation').value.trim(),description:document.getElementById('marketDescription').value.trim(),created:Date.now()};if(!x.title||!x.category||!x.condition||!x.seller||!x.email){status.textContent='Please complete all required fields.';return}items.push(x);if(!save()){items.pop();status.textContent='Could not save listing. Browser storage may be full or unavailable.';return}form.reset();render();status.textContent='Listing saved in this browser only. It is not yet public to other URTRIBE users.'});render();
+})();
+</script>
+
+</body>
+</html>
