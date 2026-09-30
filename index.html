@@ -273,6 +273,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
       <button class="icon-btn" id="themeBtn" title="Toggle theme">☾</button>
       <button class="go-live" id="goLiveBtn">＋ Go Live</button>
       <button class="avatar">UT</button>
+      <button class="secondary" id="logoutBtn" type="button" style="white-space:nowrap">Log out</button>
     </nav>
   </header>
   <nav class="mobile-quicknav" aria-label="Quick navigation">
@@ -356,7 +357,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
         <div><span class="eyebrow">CREATOR STUDIO · CLOUD PUBLISHING</span><h2>Publish a Video or Short</h2><p>Publish videos to URTRIBE STREAM storage after signing in.</p></div>
       </section>
       <section class="product-card" style="padding:18px;margin-bottom:22px">
-        <form id="videoUploadForm" class="auth-form" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;align-items:end">
+        <form id="videoUploadForm" class="auth-form" novalidate style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;align-items:end">
           <label style="margin:0">Video title<input id="uploadVideoTitle" maxlength="90" placeholder="Give your video a title" required></label>
           <label style="margin:0">Creator name<input id="uploadVideoCreator" maxlength="60" placeholder="Your creator name" required></label>
           <label style="margin:0">Format<select id="uploadVideoType"><option value="video">Full video</option><option value="short">Short (up to 60 seconds)</option></select></label>
@@ -955,8 +956,15 @@ document.getElementById("cartButton").addEventListener("click",()=>document.getE
  toggle.addEventListener('click',()=>mode(!creating));
  document.getElementById('authForgot').addEventListener('click',async()=>{if(!client){say('Authentication service did not load. Refresh and try again.');return;}const email=document.getElementById('authEmail').value.trim();if(!email){say('Enter your email address first.');return;}say('Sending password reset email…');const {error}=await client.auth.resetPasswordForEmail(email,{redirectTo:SUPABASE_URL.replace('https://mvfuduxvlmcnhaewfxnw.supabase.co','https://urtribe-stream.onrender.com')});say(error?error.message:'If an account exists for this email, a password reset link will be sent.');});
  document.getElementById('authVisitor').addEventListener('click',()=>screen.classList.add('hidden'));
+ document.getElementById('logoutBtn')?.addEventListener('click',async()=>{
+   if(client){const {error}=await client.auth.signOut();if(error){say(error.message);return;}}
+   currentUser=null;
+   screen.classList.remove('hidden');
+   mode(false);
+   if(typeof showToast==='function')showToast('You have been signed out.');
+ });
  form.addEventListener('submit',async e=>{e.preventDefault();if(!client){say('Authentication service did not load. Check your connection and refresh.');return;}const email=document.getElementById('authEmail').value.trim(),pw=password.value,name=document.getElementById('authName').value.trim();if(!email||pw.length<6||(creating&&!name)){say('Enter the required details. Password must be at least 6 characters.');return;}submit.disabled=true;submit.textContent=creating?'Creating…':'Signing in…';say('');try{let result;if(creating){result=await client.auth.signUp({email,password:pw,options:{data:{display_name:name},emailRedirectTo:'https://urtribe-stream.onrender.com'}});}else{result=await client.auth.signInWithPassword({email,password:pw});}if(result.error)throw result.error;currentUser=result.data.user;if(creating&&currentUser&&result.data.session){const {error}=await client.from('profiles').upsert({id:currentUser.id,display_name:name,bio:''},{onConflict:'id'});if(error)throw error;}if(creating&&!result.data.session){say('Account created. Check your email to confirm, then sign in.');}else{screen.classList.add('hidden');await loadProfile(currentUser);if(typeof showToast==='function')showToast(creating?'Welcome to URTRIBE STREAM!':'Signed in successfully.');}}catch(err){say(err.message||'Could not complete sign-in. Please try again.');}finally{submit.disabled=false;submit.textContent=creating?'Create Account':'Sign In';}});
- if(client){client.auth.getSession().then(async({data})=>{if(data.session){currentUser=data.session.user;screen.classList.add('hidden');await loadProfile(currentUser);}});client.auth.onAuthStateChange((_event,session)=>{currentUser=session?.user||null;if(currentUser){screen.classList.add('hidden');loadProfile(currentUser);}});}else say('Authentication library unavailable. Refresh while connected to the internet.');
+ if(client){client.auth.getSession().then(async({data})=>{if(data.session){currentUser=data.session.user;screen.classList.add('hidden');await loadProfile(currentUser);}});client.auth.onAuthStateChange((_event,session)=>{currentUser=session?.user||null;if(currentUser){screen.classList.add('hidden');loadProfile(currentUser);}else{screen.classList.remove('hidden');mode(false);}});}else say('Authentication library unavailable. Refresh while connected to the internet.');
  window.urtribeSupabase=client;window.urtribeCurrentUser=()=>currentUser;
 })();
 
@@ -1133,13 +1141,14 @@ document.getElementById("cartButton").addEventListener("click",()=>document.getE
      entries=entries.filter(v=>v.id!==id);render();say('Video removed from the platform.');
    }catch(error){say('Could not remove video: '+(error.message||'Please try again.'));}
  }
- form.addEventListener('submit',async e=>{
-   e.preventDefault();
+ async function publishVideo(){
    client=window.urtribeSupabase;
    const user=window.urtribeCurrentUser?.();
    if(!client||!user){say('Please sign in to publish a video.');return;}
    const title=document.getElementById('uploadVideoTitle').value.trim(),creator=document.getElementById('uploadVideoCreator').value.trim(),kind=document.getElementById('uploadVideoType').value,file=fileInput.files?.[0];
-   if(!file)return;
+   if(!title){say('Please enter a video title.');document.getElementById('uploadVideoTitle').focus();return;}
+   if(!creator){say('Please enter your creator name.');document.getElementById('uploadVideoCreator').focus();return;}
+   if(!file){say('Please choose a video file first.');return;}
    if(!file.type.startsWith('video/')){say('Choose a supported video file.');return;}
    if(file.size>100*1024*1024){say('Videos must be 100 MB or smaller for this upload form.');return;}
    const btn=document.getElementById('publishVideoBtn');btn.disabled=true;say('Checking video…');
@@ -1163,7 +1172,8 @@ document.getElementById("cartButton").addEventListener("click",()=>document.getE
      if(mediaPath){const {error:cleanupError}=await client.storage.from(bucket).remove([mediaPath]);if(cleanupError)console.warn('Upload cleanup:',cleanupError.message);}
      say(error.message||'Upload failed. Check your storage bucket and access policies, then try again.');
    }finally{btn.disabled=false;}
- });
+ }
+ form.addEventListener('submit',async e=>{e.preventDefault();await publishVideo();});
  if(client){loadVideos();client.auth.onAuthStateChange(()=>loadVideos());}
  else say('Sign in and connect to Supabase to publish videos.');
 })();</script>
