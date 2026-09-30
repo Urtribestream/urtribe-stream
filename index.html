@@ -1113,5 +1113,86 @@ document.getElementById("cartButton").addEventListener("click",()=>document.getE
 })();
 </script>
 
+
+<style id="urtMultiPageStyles">
+.page-view{display:none;animation:urtPageIn .18s ease}
+.page-view.is-active{display:block}
+.page-heading{margin:0 0 22px;padding:22px 24px;border:1px solid var(--line);border-radius:16px;background:linear-gradient(110deg,rgba(166,107,255,.10),rgba(240,120,25,.07)),var(--panel)}
+.page-heading h1{font-size:clamp(25px,3vw,34px);margin:0 0 5px;letter-spacing:-.04em}
+.page-heading p{margin:0;color:var(--muted);font-size:13px}
+.page-nav{display:grid;gap:5px;margin-bottom:18px}
+.page-nav button{display:flex;align-items:center;gap:11px;padding:11px 13px;border:1px solid transparent;border-radius:10px;background:transparent;color:#c3c0bb;text-align:left;font-weight:700;font-size:13px}
+.page-nav button:hover,.page-nav button.is-active{background:#211b15;color:#fff;border-color:#3c2d20}
+.page-nav button.is-active{box-shadow:inset 3px 0 var(--accent)}
+.mobile-page-nav{display:none}
+@keyframes urtPageIn{from{opacity:.65;transform:translateY(4px)}to{opacity:1;transform:none}}
+@media(max-width:800px){.mobile-page-nav{display:flex;position:sticky;top:64px;z-index:19;gap:7px;overflow-x:auto;padding:9px 12px;background:rgba(10,10,14,.97);border-bottom:1px solid var(--line)}.mobile-page-nav button{flex:0 0 auto;padding:9px 12px;border:1px solid var(--line);border-radius:999px;background:var(--panel);color:var(--text);font-size:12px;font-weight:750}.mobile-page-nav button.is-active{border-color:var(--accent);background:#2b1c10;color:#ffad70}}
+</style>
+<script id="urtMultiPageRouter">
+(()=> {
+ const main=document.getElementById('mainContent'); if(!main)return;
+ const original=[...main.children];
+ const get=(id)=>original.find(el=>el.id===id)||main.querySelector('#'+id);
+ const byClass=(cls)=>original.find(el=>el.classList.contains(cls));
+ const hero=byClass('hero'), shorts=get('shortsFeed'), uploadHead=get('creatorUploadsSection');
+ const uploadCard=original.find(el=>el.querySelector&&el.querySelector('#videoUploadForm'));
+ const library=get('creatorVideoLibrary'), streamHead=original.find(el=>el.querySelector&&el.querySelector('#sectionTitle'));
+ const streams=get('streamGrid'), radio=get('radioShop'), movies=get('movieLounge'), earn=get('earnWithUs');
+ const merch=get('apparelShop'), gear=get('gearMarketplace'), categories=byClass('categories');
+ const pageDefs=[
+  {id:'home',label:'Home',icon:'⌂',desc:'Featured creators, clips and communities.',nodes:[hero,categories]},
+  {id:'live',label:'Live',icon:'●',desc:'Browse live channels and creators.',nodes:[streamHead,streams]},
+  {id:'shorts',label:'Shorts',icon:'▣',desc:'Quick clips, highlights and creator stories.',nodes:[shorts]},
+  {id:'videos',label:'Videos & Movies',icon:'🎬',desc:'Watch creator videos and films you have permission to stream.',nodes:[movies]},
+  {id:'music',label:'Music & Radio',icon:'♫',desc:'Discover community music, DJs, artists and radio.',nodes:[radio]},
+  {id:'marketplace',label:'Marketplace',icon:'▤',desc:'Community merchandise and music equipment listings.',nodes:[merch,gear]},
+  {id:'studio',label:'Creator Studio',icon:'✦',desc:'Manage uploads and explore creator opportunities.',nodes:[uploadHead,uploadCard,library,earn]}
+ ];
+ // Place each existing content section inside a dedicated page without cloning IDs or controls.
+ const pages={};
+ pageDefs.forEach(def=>{
+   const page=document.createElement('section');page.className='page-view';page.id='page-'+def.id;page.dataset.page=def.id;
+   const heading=document.createElement('div');heading.className='page-heading';
+   const h=document.createElement('h1');h.textContent=def.label;
+   const p=document.createElement('p');p.textContent=def.desc;
+   heading.append(h,p);page.append(heading);
+   def.nodes.filter(Boolean).forEach(node=>page.append(node));
+   pages[def.id]=page;main.append(page);
+ });
+ const navItems=pageDefs.map(x=>({id:x.id,label:x.label,icon:x.icon}));
+ const sidebar=document.querySelector('.sidebar');
+ if(sidebar){
+   const nav=document.createElement('nav');nav.className='page-nav';nav.setAttribute('aria-label','Main pages');
+   navItems.forEach(item=>{const b=document.createElement('button');b.type='button';b.dataset.page=item.id;b.innerHTML='<span aria-hidden="true">'+item.icon+'</span><span>'+item.label+'</span>';nav.append(b)});
+   sidebar.prepend(nav);
+   // Keep category shortcuts and filters, but give them their own discover section.
+   const discover=sidebar.querySelector('.side-section');
+   if(discover){discover.querySelectorAll('[data-scroll]').forEach(b=>b.remove());}
+ }
+ const oldMobile=document.querySelector('.mobile-quicknav');
+ if(oldMobile){const nav=document.createElement('nav');nav.className='mobile-page-nav';nav.setAttribute('aria-label','Main pages');navItems.forEach(item=>{const b=document.createElement('button');b.type='button';b.dataset.page=item.id;b.textContent=item.icon+' '+item.label;nav.append(b)});oldMobile.replaceWith(nav);}
+ function activate(id,writeHash=true){
+   if(!pages[id])id='home';
+   Object.entries(pages).forEach(([key,node])=>{node.classList.toggle('is-active',key===id);node.setAttribute('aria-hidden',key===id?'false':'true')});
+   document.querySelectorAll('[data-page]').forEach(b=>{b.classList.toggle('is-active',b.dataset.page===id);if(b.tagName==='BUTTON')b.setAttribute('aria-current',b.dataset.page===id?'page':'false')});
+   if(writeHash&&location.hash!=='#'+id)history.pushState({page:id},'', '#'+id);
+   if(id==='live'&&typeof window.urtSetFilter==='function')window.urtSetFilter('all',false);
+   window.scrollTo({top:0,behavior:'smooth'});
+ }
+ document.addEventListener('click',e=>{
+   const btn=e.target.closest('[data-page]');if(btn){e.preventDefault();activate(btn.dataset.page);return;}
+   const old=e.target.closest('.side-link[data-scroll]');
+   if(old){e.preventDefault();activate(old.dataset.scroll==='movieLounge'?'videos':old.dataset.scroll==='apparelShop'?'marketplace':'marketplace');}
+   const filterBtn=e.target.closest('.side-link[data-filter]');
+   if(filterBtn){activate('live');return;}
+   const cat=e.target.closest('.side-link[data-category],.category-card');
+   if(cat){activate('live');}
+ });
+ window.addEventListener('popstate',()=>activate(location.hash.slice(1)||'home',false));
+ // Initial route supports direct page links such as /#music.
+ activate(location.hash.slice(1)||'home',false);
+})();
+</script>
+
 </body>
 </html>
